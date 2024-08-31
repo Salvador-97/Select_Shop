@@ -6,7 +6,7 @@ leerCSV()
 
 # Ventana principal
 app = Tk()
-app.geometry("1000x600")
+app.geometry("900x800")
 app.title("Select Shop Inbound")
 
 titulo = Label(app, text='Inbound Manager')
@@ -31,6 +31,7 @@ pestañas.add(pestañaTiempoExtra, text='Tiempo Extra')
 # titulo.pack()
 
 obtenerPestañas(pestañaPersonal)
+guardarDatos(pestañaPersonal)
 
 # iconoLupa = PhotoImage(file = r"icons/lupa.png")
 # iconoLupa = iconoLupa.subsample(2)
