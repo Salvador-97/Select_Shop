@@ -8,7 +8,6 @@ import json
 def extrarNumero(codigo):
     numeros = leerNumerosMarbetes()
     codigoSKU = list(codigo)
-    # print(codigoSKU)
     codigoAbreviado = codigoSKU[0] + codigoSKU[1]
     numero = numeros[codigoAbreviado]
     codigoMarbete.append(codigoAbreviado)
@@ -16,8 +15,6 @@ def extrarNumero(codigo):
 
 def obtenerPestañas(pestaña):
     pestañaPersonal = pestaña
-    columna1 = 250
-    columna2 = 530
     
     labelCodigo = Label(pestañaPersonal, text='Codigo', justify='center')
     labelCodigo.pack()
@@ -32,116 +29,110 @@ def obtenerPestañas(pestaña):
     boton.pack()
     
     labelBarras = Label(pestañaPersonal, text='Codigo de barras', justify='center')
-    # labelBarras.place(x=columna2, y=100)
-    labelBarras.place(x=230, y=100)
+    labelBarras.place(relx=0.2, rely=0.12)
     barras = ttk.Entry(pestañaPersonal, justify='center')
-    barras.place(x=columna1 - 50, y=130)
-    # barras.place(x=columna2 - 30, y=130)
+    barras.place(relx=0.2, rely=0.16)
 
     labelEstiba = Label(pestañaPersonal, text='Cajas por tarima', justify='center')
-    # labelEstiba.pack()
-    labelEstiba.place(x=columna2+8, y=100)
+    labelEstiba.place(relx=0.6, rely=0.12)
     estiba = ttk.Entry(pestañaPersonal, justify='center')
-    estiba.place(x=columna2 - 30, y=130)
-    # estiba.pack()
+    estiba.place(relx=0.6, rely=0.16)
     
     labelProductos = Label(pestañaPersonal, text='Productos por tarima', justify='center')
-    labelProductos.place(x=220, y=170)
-    # labelProductos.pack()
+    labelProductos.place(relx=0.2, rely=0.22)
     noProductos = ttk.Entry(pestañaPersonal, justify='center')
-    noProductos.place(x=columna1 - 50, y=200)
-    # noProductos.pack()
+    noProductos.place(relx=0.2, rely=0.26)
     
     labelMasterPack = Label(pestañaPersonal, text='Master Pack', justify='center')
-    labelMasterPack.place(x=columna2+20, y=170)
-    # labelMasterPack.pack()
+    labelMasterPack.place(relx=0.6, rely=0.22)
     masterPack = ttk.Entry(pestañaPersonal, justify='center')
-    masterPack.place(x=columna2 - 30, y=200)
-    # masterPack.pack()
+    masterPack.place(relx=0.6, rely=0.26)
     
     labelDescripcion = Label(pestañaPersonal, text='Descripcion', justify='center')
-    labelDescripcion.place(x=420, y=240)
-    # labelDescripcion.pack()
+    labelDescripcion.place(relx=0.45, rely=0.32)
     descripcion = ttk.Entry(pestañaPersonal, justify='center')
-    descripcion.place(x=250, y=270, relwidth=0.5)
-    # descripcion.pack()
+    descripcion.place(relx=0.26, rely=0.36, relwidth=0.5)
     
+    botonEditar = ttk.Button(
+        pestañaPersonal,
+        text='Editar',
+        command=lambda: habilitarEdicion(descripcion, barras, estiba, noProductos, masterPack)
+    )
+    botonEditar.place(relx=0.45, rely=0.42)
+        
     separator = ttk.Separator(pestañaPersonal, orient='horizontal')
-    separator.place(relx=0, rely=0.47, relwidth=1, relheight=1)
+    separator.place(relx=0, rely=0.5, relwidth=1, relheight=1)
 
-# def generarCampos():
-#     campoCodigo = ttk.Entry(pestañaPersonal)
-#     campoCodigo.pack()
-#     boton = ttk.Button(pestañaPersonal, text='Nuevo')
-#     boton.pack()
+
+def habilitarEdicion(descripcion, barras, estiba, noProductos, masterPack):
+    barras.config(state='enabled')
+    descripcion.config(state='enabled')
+    estiba.config(state='enabled')
+    noProductos.config(state='enabled')
+    masterPack.config(state='enabled')
+    
+def deshabilitarEdicion(descripcion, barras, estiba, noProductos, masterPack):
+     descripcion.config(state='disabled')
+     barras.config(state='disabled')
+     estiba.config(state='disabled')
+     noProductos.config(state='disabled')
+     masterPack.config(state='disabled')
+
 
 def informacionArticulo(listaInfoArticulo, descripcion, barras, estiba, noProductos, masterPack):
     if((barras.get() != '') or (descripcion.get() != '')):
-        barras.config(state='enabled')
+        habilitarEdicion(descripcion, barras, estiba, noProductos, masterPack)
         barras.delete(0, END)
-        
-        descripcion.config(state='enabled')
         descripcion.delete(0, END)
-        
-        estiba.config(state='enabled')
         estiba.delete(0, END)
-        
-        noProductos.config(state='enabled')
         noProductos.delete(0, END)
-        
-        masterPack.config(state='enabled')
-        masterPack.delete(0, END)
+        masterPack.delete(0, END)   
         
     descripcion.insert(0, listaInfoArticulo[0])
-    # descripcion.config(state='disabled')
     barras.insert(0, listaInfoArticulo[1])
-    barras.config(state='disabled')
-    
     estiba.insert(0, listaInfoArticulo[2])
-    estiba.config(state='disabled')
-    
     noProductos.insert(0, listaInfoArticulo[3])
-    noProductos.config(state='disabled')
-    
     masterPack.insert(0, listaInfoArticulo[4])
-    masterPack.config(state='disabled')
+    deshabilitarEdicion(descripcion, barras, estiba, noProductos, masterPack)
     # codigoMarbete = listaInfoArticulo[5]
     
 def guardarDatos(pestañaPersonal):
     labelContenedor = Label(pestañaPersonal, text='Contenedor', justify='center')
-    labelContenedor.place(x=250, y=400)
-    # labelContenedor.pack()
+    labelContenedor.place(relx=0.2, rely=0.54)
     campoContenedor = ttk.Entry(pestañaPersonal, justify='center')
-    campoContenedor.place(x=200, y=430)
-    # campoContenedor.pack()
-    
-    labelNoTarimas = Label(pestañaPersonal, text='Numero de tarimas', justify='center')
-    labelNoTarimas.place(x=515, y=400)
-    # labelNoTarimas.pack()
-    campoNoTarimas = ttk.Entry(pestañaPersonal, justify='center')
-    campoNoTarimas.place(x=500, y=430)
-    # campoNoTarimas.pack()
-    
-    labelResto = Label(pestañaPersonal, text='Resto', justify='center')
-    # labelResto.pack()
-    campoResto = ttk.Entry(pestañaPersonal, justify='center')
-    # campoResto.pack()
+    campoContenedor.place(relx=0.2, rely=0.58)
     
     labelFecha = Label(pestañaPersonal, text='Fecha', justify='center')
-    # labelFecha.pack()
+    labelFecha.place(relx=0.6, rely=0.54)
     campoFecha = ttk.Entry(pestañaPersonal, justify='center')
-    # campoFecha.pack()
+    campoFecha.place(relx=0.6, rely=0.58)
+    
+    labelProveedor = Label(pestañaPersonal, text='Proveedor', justify='center')
+    labelProveedor.place(relx=0.2, rely=0.64)
+    campoProveedor = ttk.Entry(pestañaPersonal, justify='center')
+    campoProveedor.place(relx=0.2, rely=0.68)
+    
+    labelNoTarimas = Label(pestañaPersonal, text='Numero de tarimas', justify='center')
+    labelNoTarimas.place(relx=0.6, rely=0.64)
+    campoNoTarimas = ttk.Entry(pestañaPersonal, justify='center')
+    campoNoTarimas.place(relx=0.6, rely=0.68)
+    
+    labelResto = Label(pestañaPersonal, text='Resto', justify='center')
+    labelResto.place(relx=0.2, rely=0.74)
+    campoResto = ttk.Entry(pestañaPersonal, justify='center')
+    campoResto.place(relx=0.2, rely=0.78)
     
     botonAgregar = ttk.Button(
         pestañaPersonal, 
-        text='Agregar marbetes', 
+        text='Generar marbetes', 
         command=lambda: editarSheet(campoContenedor, campoNoTarimas, campoResto, campoFecha))
-    # botonAgregar.pack()
+    botonAgregar.place(relx=0.45, rely=0.84)
     
 def editarSheet(contenedor, noTarimas, resto, fecha):
     marbetes = []
+    scrollPestaña = scroll.ScrolledText()
     marbetesGenerados = scroll.ScrolledText(pestañaPersonal, width=50, height=10)
-    marbetesGenerados.pack()
+    marbetesGenerados.place(relx=0.22, rely=0.90)
     print(noTarimas.get())
     # marbetesGenerados.grid(column = 0, pady = 10, padx = 10)
     

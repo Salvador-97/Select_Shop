@@ -6,8 +6,9 @@ leerCSV()
 
 # Ventana principal
 app = Tk()
-app.geometry("900x800")
+app.geometry("900x900")
 app.title("Select Shop Inbound")
+app.resizable(False, False)
 
 titulo = Label(app, text='Inbound Manager')
 codigo = Label(
