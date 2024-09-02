@@ -8,7 +8,13 @@ leerCSV()
 app = Tk()
 app.geometry("900x900")
 app.title("Select Shop Inbound")
-app.resizable(False, False)
+# app.resizable(False, False)
+
+app.update()
+
+# altura_pantalla = app.winfo_screenheight()
+# anchura_pantalla = app.winfo_screenwidth()
+# print(f"Altura de pantalla: {altura_pantalla}\nAnchura de pantalla: {anchura_pantalla}")
 
 titulo = Label(app, text='Inbound Manager')
 codigo = Label(
@@ -24,27 +30,10 @@ pestañas.pack(fill='both', expand='yes')
 pestañaPersonal = ttk.Frame(pestañas)
 pestañaTiempoExtra = ttk.Frame(pestañas)
 
-
-# Button(pestañaPersonal, text='Hola')
-
 pestañas.add(pestañaPersonal, text='Personal')
 pestañas.add(pestañaTiempoExtra, text='Tiempo Extra')
-# titulo.pack()
 
 obtenerPestañas(pestañaPersonal)
 guardarDatos(pestañaPersonal)
 
-# iconoLupa = PhotoImage(file = r"icons/lupa.png")
-# iconoLupa = iconoLupa.subsample(2)
-
-# boton = ttk.Button(app, text='Buscar', width=25, command=verificacionInformacionArticulo)
-# codigo.pack()
-
-# boton.pack()
-# descripcion.pack()
-# barras.pack()
 app.mainloop()
-
-# link = input('Ingrese el id del archivo del drive')
-# print('\n' + link)
-

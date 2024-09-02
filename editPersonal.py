@@ -4,6 +4,7 @@ from tkinter import ttk
 from tkinter import messagebox
 from tkinter import scrolledtext as scroll
 import json
+from editSheet import agregarDatos
 
 def extrarNumero(codigo):
     numeros = leerNumerosMarbetes()
@@ -125,25 +126,28 @@ def guardarDatos(pestañaPersonal):
     botonAgregar = ttk.Button(
         pestañaPersonal, 
         text='Generar marbetes', 
-        command=lambda: editarSheet(campoContenedor, campoNoTarimas, campoResto, campoFecha))
+        command=lambda: editarSheet(campoContenedor, campoNoTarimas, campoResto, campoFecha, campoProveedor))
     botonAgregar.place(relx=0.45, rely=0.84)
     
-def editarSheet(contenedor, noTarimas, resto, fecha):
+def editarSheet(contenedor, noTarimas, resto, fecha, proveedor):
     marbetes = []
     scrollPestaña = scroll.ScrolledText()
     marbetesGenerados = scroll.ScrolledText(pestañaPersonal, width=50, height=10)
     marbetesGenerados.place(relx=0.22, rely=0.90)
-    print(noTarimas.get())
+    listaDatos.append(contenedor.get())
+    listaDatos.append(noTarimas.get())
+    listaDatos.append(resto.get())
+    listaDatos.append(fecha.get())
+    listaDatos.append(proveedor.get())
+    print(listaDatos)
+    # print(noTarimas.get())
     # marbetesGenerados.grid(column = 0, pady = 10, padx = 10)
     
     for i in range(codigoMarbete[1], codigoMarbete[1] + int(noTarimas.get()), 1):
         marbetes.append(codigoMarbete[0] + str(i))
         # marbetesGenerados.tag_config("tag_name", justify='center')
         marbetesGenerados.insert(INSERT, codigoMarbete[0] + str(i) + '\n')
-        print(codigoMarbete[0] + str(i))
-    
-    
-    
+        agregarDatos(codigoMarbete[0] + str(i), listaDatos)
     
 def verificacionInformacionArticulo(campoCodigo, descripcion, barras, estiba, noProductos, masterPack):
     codigoArticulo = campoCodigo.get()
@@ -154,6 +158,13 @@ def verificacionInformacionArticulo(campoCodigo, descripcion, barras, estiba, no
         print('Se encontro la llave')
         listaInfoArticulo = articulosShop.get(codigoArticulo)
         informacionArticulo(listaInfoArticulo, descripcion, barras, estiba, noProductos, masterPack)
+        listaDatos.append(campoCodigo.get())
+        listaDatos.append(estiba.get())
+        listaDatos.append(noProductos.get())
+        listaDatos.append(descripcion.get())
+        listaDatos.append(barras.get())
+        listaDatos.append(masterPack.get())
+        # print(listaDatos)
     else:
         print('No se encontro la llave')
 
