@@ -34,6 +34,6 @@ pestañas.add(pestañaPersonal, text='Personal')
 pestañas.add(pestañaTiempoExtra, text='Tiempo Extra')
 
 obtenerPestañas(pestañaPersonal)
-guardarDatos(pestañaPersonal)
+# guardarDatos(pestañaPersonal)
 
 app.mainloop()

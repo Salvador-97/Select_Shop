@@ -1,12 +1,20 @@
-import csv
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
 from tkinter import scrolledtext as scroll
 import json
+import csv
+import re
 from editSheet import agregarDatos
 
-def extrarNumero(codigo):
+def crearCampo(texto, coordenadaX, coordenadaY):
+    labelAux = Label(pestañaPersonal, text=texto, justify='center')
+    labelAux.place(relx=coordenadaX, rely=coordenadaY)
+    campoAux = ttk.Entry(pestañaPersonal, justify='center')
+    campoAux.place(relx=coordenadaX, rely=coordenadaY + 0.04)
+    return campoAux
+
+def extraerNumero(codigo):
     numeros = leerNumerosMarbetes()
     codigoSKU = list(codigo)
     codigoAbreviado = codigoSKU[0] + codigoSKU[1]
@@ -29,25 +37,10 @@ def obtenerPestañas(pestaña):
         )
     boton.pack()
     
-    labelBarras = Label(pestañaPersonal, text='Codigo de barras', justify='center')
-    labelBarras.place(relx=0.2, rely=0.12)
-    barras = ttk.Entry(pestañaPersonal, justify='center')
-    barras.place(relx=0.2, rely=0.16)
-
-    labelEstiba = Label(pestañaPersonal, text='Cajas por tarima', justify='center')
-    labelEstiba.place(relx=0.6, rely=0.12)
-    estiba = ttk.Entry(pestañaPersonal, justify='center')
-    estiba.place(relx=0.6, rely=0.16)
-    
-    labelProductos = Label(pestañaPersonal, text='Productos por tarima', justify='center')
-    labelProductos.place(relx=0.2, rely=0.22)
-    noProductos = ttk.Entry(pestañaPersonal, justify='center')
-    noProductos.place(relx=0.2, rely=0.26)
-    
-    labelMasterPack = Label(pestañaPersonal, text='Master Pack', justify='center')
-    labelMasterPack.place(relx=0.6, rely=0.22)
-    masterPack = ttk.Entry(pestañaPersonal, justify='center')
-    masterPack.place(relx=0.6, rely=0.26)
+    barras = crearCampo('Codigo de barras', 0.2, 0.16)
+    estiba = crearCampo('Cajas por tarima', 0.6, 0.16)
+    noProductos = crearCampo('Productos por tarima', 0.2, 0.26)
+    masterPack = crearCampo('Master Pack', 0.6, 0.26)
     
     labelDescripcion = Label(pestañaPersonal, text='Descripcion', justify='center')
     labelDescripcion.place(relx=0.45, rely=0.32)
@@ -63,6 +56,10 @@ def obtenerPestañas(pestaña):
         
     separator = ttk.Separator(pestañaPersonal, orient='horizontal')
     separator.place(relx=0, rely=0.5, relwidth=1, relheight=1)
+    guardarDatos()
+
+def obtenerNuevosDatos():
+    listaDatos()
 
 
 def habilitarEdicion(descripcion, barras, estiba, noProductos, masterPack):
@@ -97,36 +94,19 @@ def informacionArticulo(listaInfoArticulo, descripcion, barras, estiba, noProduc
     deshabilitarEdicion(descripcion, barras, estiba, noProductos, masterPack)
     # codigoMarbete = listaInfoArticulo[5]
     
-def guardarDatos(pestañaPersonal):
-    labelContenedor = Label(pestañaPersonal, text='Contenedor', justify='center')
-    labelContenedor.place(relx=0.2, rely=0.54)
-    campoContenedor = ttk.Entry(pestañaPersonal, justify='center')
-    campoContenedor.place(relx=0.2, rely=0.58)
+def guardarDatos():
     
-    labelFecha = Label(pestañaPersonal, text='Fecha', justify='center')
-    labelFecha.place(relx=0.6, rely=0.54)
-    campoFecha = ttk.Entry(pestañaPersonal, justify='center')
-    campoFecha.place(relx=0.6, rely=0.58)
+    contenedor = crearCampo('Contenedor', 0.2, 0.54)
+    fecha = crearCampo('Fecha', 0.6, 0.54)
+    proveedor = crearCampo('Proveedor', 0.2, 0.64)
+    noTarimas = crearCampo('Numero de tarimas', 0.6, 0.64)
+    resto = crearCampo('Resto', 0.2, 0.74)
     
-    labelProveedor = Label(pestañaPersonal, text='Proveedor', justify='center')
-    labelProveedor.place(relx=0.2, rely=0.64)
-    campoProveedor = ttk.Entry(pestañaPersonal, justify='center')
-    campoProveedor.place(relx=0.2, rely=0.68)
-    
-    labelNoTarimas = Label(pestañaPersonal, text='Numero de tarimas', justify='center')
-    labelNoTarimas.place(relx=0.6, rely=0.64)
-    campoNoTarimas = ttk.Entry(pestañaPersonal, justify='center')
-    campoNoTarimas.place(relx=0.6, rely=0.68)
-    
-    labelResto = Label(pestañaPersonal, text='Resto', justify='center')
-    labelResto.place(relx=0.2, rely=0.74)
-    campoResto = ttk.Entry(pestañaPersonal, justify='center')
-    campoResto.place(relx=0.2, rely=0.78)
     
     botonAgregar = ttk.Button(
         pestañaPersonal, 
         text='Generar marbetes', 
-        command=lambda: editarSheet(campoContenedor, campoNoTarimas, campoResto, campoFecha, campoProveedor))
+        command=lambda: editarSheet(contenedor, noTarimas, resto, fecha, proveedor))
     botonAgregar.place(relx=0.45, rely=0.84)
     
 def editarSheet(contenedor, noTarimas, resto, fecha, proveedor):
@@ -134,7 +114,15 @@ def editarSheet(contenedor, noTarimas, resto, fecha, proveedor):
     scrollPestaña = scroll.ScrolledText()
     marbetesGenerados = scroll.ScrolledText(pestañaPersonal, width=50, height=10)
     marbetesGenerados.place(relx=0.22, rely=0.90)
-    listaDatos.append(contenedor.get())
+    
+    listaDatos.append(codigoProducto)
+    listaDatos.append(barras.get())
+    listaDatos.append(estiba.get())
+    listaDatos.append(noProductos.get())
+    listaDatos.append(masterPack.get())
+    listaDatos.append(descripcion.get())
+    
+    # listaDatos.append()
     listaDatos.append(noTarimas.get())
     listaDatos.append(resto.get())
     listaDatos.append(fecha.get())
@@ -150,23 +138,36 @@ def editarSheet(contenedor, noTarimas, resto, fecha, proveedor):
         agregarDatos(codigoMarbete[0] + str(i), listaDatos)
     
 def verificacionInformacionArticulo(campoCodigo, descripcion, barras, estiba, noProductos, masterPack):
-    codigoArticulo = campoCodigo.get()
-    extrarNumero(codigoArticulo)
 
-    if(articulosShop.get(codigoArticulo)):
+    codigoArticulo = campoCodigo.get()
+    codigoArticulo = codigoArticulo.upper()
+    comprobacionRegex = '[A-Z][A-Z][1-9][0-9]*[0-9]*C[1-9][0-9]*'
+    resultado = re.findall(comprobacionRegex, codigoArticulo)
+    if(resultado):
         
-        print('Se encontro la llave')
-        listaInfoArticulo = articulosShop.get(codigoArticulo)
-        informacionArticulo(listaInfoArticulo, descripcion, barras, estiba, noProductos, masterPack)
-        listaDatos.append(campoCodigo.get())
-        listaDatos.append(estiba.get())
-        listaDatos.append(noProductos.get())
-        listaDatos.append(descripcion.get())
-        listaDatos.append(barras.get())
-        listaDatos.append(masterPack.get())
-        # print(listaDatos)
+        extraerNumero(codigoArticulo)
+
+        if(articulosShop.get(codigoArticulo)):
+            # print('Se encontro la llave')
+            listaInfoArticulo = articulosShop.get(codigoArticulo)
+            informacionArticulo(listaInfoArticulo, descripcion, barras, estiba, noProductos, masterPack)
+            # codigoProducto = campoCodigo.get()
+            # codigoBarras = barras
+            # cajasTarimas = estiba
+            # productosTarima = noProductos
+            # masterPackCaja = masterPack
+            # descripcionProducto = descripcion
+            listaDatos.append(campoCodigo.get())
+            # listaDatos.append(estiba.get())
+            # listaDatos.append(noProductos.get())
+            # listaDatos.append(descripcion.get())
+            # listaDatos.append(barras.get())
+            # listaDatos.append(masterPack.get())
+            # print(listaDatos)
+        else:
+            messagebox.showwarning("Codigo no encontrado", "No se ha encontrado el producto")
     else:
-        print('No se encontro la llave')
+        messagebox.showerror("Error", "Código no valido")
 
 def leerCSV():
     with open('ArticulosSelectShop.csv') as articulos:
@@ -190,6 +191,9 @@ listaDatos = []
 codigoMarbete = []
 pestañaPersonal = None
 
-# campoTexto = ttk.Entry(app)
-# descripcion = ttk.Entry(app)
-# barras = ttk.Entry(app)
+codigoProducto = None
+barras = None
+estiba = None
+noProductos = None
+masterPack = None
+descripcion = None
