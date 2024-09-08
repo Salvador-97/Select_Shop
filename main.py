@@ -23,6 +23,9 @@ codigo = Label(
     justify='center',
 )
 
+icono = PhotoImage(file="icons/paquete.png")
+app.iconphoto(False, icono)
+
 # Pestañas
 pestañas = ttk.Notebook(app)
 pestañas.pack(fill='both', expand='yes')

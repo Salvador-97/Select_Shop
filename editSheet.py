@@ -5,7 +5,7 @@ from datetime import date
 
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 KEY = 'key.json'
-SPREADSHEET_ID = '1s_ataA0jw61Olx6wqH72EwCQAxJDbvtdfNSJzNW5RgE'
+SPREADSHEET_ID = '1WhFKnT7YgsoFm6dBWNaaPb0vwZCvXsBl4XMsTVD-LXs'
 
 creds = None
 creds = service_account.Credentials.from_service_account_file(KEY, scopes = SCOPES)
@@ -18,9 +18,9 @@ sheet = service.spreadsheets()
 # FECHA = str(date.today())
 
 def agregarDatos(marbete, listaDatos):
-    print(listaDatos)
-    valores = [[marbete, listaDatos[0], listaDatos[1], listaDatos[2], listaDatos[3], listaDatos[9], listaDatos[6],
-               listaDatos[3], listaDatos[4], listaDatos[5], listaDatos[10]]]
+    # print(listaDatos)
+    valores = [[marbete, listaDatos[0], '', listaDatos[1], listaDatos[2], '', listaDatos[3], listaDatos[8], listaDatos[10],
+               listaDatos[3], listaDatos[4], listaDatos[5], listaDatos[9]]]
     resultado = sheet.values().append(spreadsheetId = SPREADSHEET_ID, 
                                range = 'A1',
                                valueInputOption = 'USER_ENTERED',
