@@ -39,8 +39,8 @@ def obtenerPestañas(pestaña):
     boton.pack()
     
     barras = crearCampo('Codigo de barras', 0.2, 0.16)
-    estiba = crearCampo('Cajas por tarima', 0.6, 0.16)
-    noProductos = crearCampo('Productos por tarima', 0.2, 0.26)
+    estiba = crearCampo('Productos por tarima', 0.6, 0.16)
+    noProductos = crearCampo('Cajas por tarima', 0.2, 0.26)
     masterPack = crearCampo('Master Pack', 0.6, 0.26)
     
     labelDescripcion = Label(pestañaPersonal, text='Descripcion', justify='center')
@@ -97,13 +97,14 @@ def guardarDatos(campoCodigo, barras, estiba, noProductos, masterPack, descripci
     proveedor = crearCampo('Proveedor', 0.2, 0.64)
     noTarimas = crearCampo('Numero de tarimas', 0.6, 0.64)
     resto = crearCampo('Resto', 0.2, 0.74)
+    ubicacion = crearCampo('Ubicación', 0.6, 0.74)
     
     botonAgregar = ttk.Button(
         pestañaPersonal, 
         text='Generar marbetes', 
         command=lambda: editarSheet(contenedor, noTarimas, resto, fecha, proveedor, 
-                                    campoCodigo, barras, estiba, noProductos, masterPack, descripcion))
-    botonAgregar.place(relx=0.45, rely=0.84)
+                                    campoCodigo, barras, estiba, noProductos, masterPack, descripcion, ubicacion))
+    botonAgregar.place(relx=0.42, rely=0.84)
     
 def validacionDatos(expresionRegular, campoVerificar):
     campoMayus = campoVerificar.get().upper()
@@ -116,7 +117,7 @@ def validacionDatos(expresionRegular, campoVerificar):
     return validacionCampos
 
 def editarSheet(contenedor, noTarimas, resto, fecha, proveedor, 
-                campoCodigo, barras, estiba, noProductos, masterPack, descripcion):
+                campoCodigo, barras, estiba, noProductos, masterPack, descripcion, ubicacion):
     
     marbetes = []
     validacionCampos = []
@@ -131,22 +132,37 @@ def editarSheet(contenedor, noTarimas, resto, fecha, proveedor,
     validacionCampos.append(validacionDatos('[0-9][0-9]*[0-9]*', noTarimas))
     validacionCampos.append(validacionDatos('[0-9][0-9]*[0-9]*', resto))
     validacionCampos.append(validacionDatos('(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0,1,2])\/(19|20)\d{2}', fecha))    
-    validacionCampos.append(validacionDatos('[A-Z][A-Z][0-9][0-9]', proveedor))    
+    validacionCampos.append(validacionDatos('[A-Z][0-9][0-9][0-9]', proveedor))    
     validacionCampos.append(validacionDatos('[A-Z][A-Z][A-Z][A-Z][0-9][0-9][0-9][0-9][0-9][0-9][0-9]', contenedor))
-
+    validacionCampos.append(validacionDatos('[A-Z][1-9][0-9]A[1-9][0-9]', ubicacion))
+    
     if(validacionCampos.count(False) == 0):
         indiceFinal = codigoMarbete[1] + int(noTarimas.get())
+        # print(listaDatos)
         for i in range(codigoMarbete[1], indiceFinal, 1):
             marbetes.append(codigoMarbete[0] + str(i))
-            # if((i == indiceFinal - 1) and (resto.get() != 0)):
-            #     print(listaDatos)
+            
+            if((i == indiceFinal - 1) and (resto.get() != '0')):
+                print("Primer IF")
+                if((masterPack.get() != 'N/A') and (resto.get() != '0')):
+                    print("Segundo IF")
+                    # print(f"Calculo: {int(masterPack.get()) * int(resto.get())}")
+                    # print(f"Resto: {resto.get()}\n MasterPack: {masterPack.get()}")
+                    # print(f"Lista Datos 1: {listaDatos[1]}")
+                    listaDatos[1] = int(masterPack.get()) * int(resto.get())
+                    listaDatos[2] = resto.get()
+                    print(listaDatos)
+                    agregarDatos(codigoMarbete[0] + str(i), listaDatos)
             #     listaDatos[2] = resto.get()
             #     print(listaDatos)
-            #     agregarDatos(codigoMarbete[0] + str(i), listaDatos)
-            # else:
+                else:
+                    print("Segundo ELSE")
+                    agregarDatos(codigoMarbete[0] + str(i), listaDatos)
+            else:
+                print("Primer ELSE")
             # marbetesGenerados.tag_config("tag_name", justify='center')
             # marbetesGenerados.insert(INSERT, codigoMarbete[0] + str(i) + '\n')
-            agregarDatos(codigoMarbete[0] + str(i), listaDatos)
+                agregarDatos(codigoMarbete[0] + str(i), listaDatos)
             
         messagebox.showinfo("Marbetes", "Marbetes generados exitosamente")
         codigoMarbete[1] = codigoMarbete[1] + int(noTarimas.get())
