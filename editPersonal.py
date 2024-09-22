@@ -8,7 +8,6 @@ import re
 from editExcel import *
 from editExcel import bookPath
 
-
 def crearCampo(pestañaPersonal, texto, coordenadaX, coordenadaY):
     labelAux = Label(pestañaPersonal, text=texto, justify='center')
     labelAux.place(relx=coordenadaX, rely=coordenadaY)
@@ -141,8 +140,9 @@ def editarSheet(contenedor, noTarimas, resto, fecha, proveedor,
         validacionCampos.append(validacionDatos('[A-Z][1-9][0-9]*A[1-9][0-9]*', ubicacion))
             
         if(validacionCampos.count(False) == 0):
-            print(f'BookPath: {bookPath}')
+            # print(f'BookPath: {bookPath}')
             indiceFinal = codigoMarbete[1] + int(noTarimas.get())
+
             for i in range(codigoMarbete[1], indiceFinal, 1):
                 marbetes.append(codigoMarbete[0] + str(i))
                 
@@ -151,12 +151,12 @@ def editarSheet(contenedor, noTarimas, resto, fecha, proveedor,
                         listaDatos[1] = int(masterPack.get()) * int(resto.get())
                         listaDatos[2] = resto.get()
                         print(listaDatos)
-                        editarExcel(codigoMarbete[0] + str(i), listaDatos)
+                        editarExcel(listaDatos, contador)
                     else:
-                        editarExcel(codigoMarbete[0] + str(i), listaDatos)
+                        editarExcel(listaDatos, contador)
                 else:
-                    editarExcel(codigoMarbete[0] + str(i), listaDatos)
-                
+                    editarExcel(listaDatos, contador)
+                contador = contador + 1
             messagebox.showinfo("Marbetes", "Marbetes generados exitosamente")
             codigoMarbete[1] = codigoMarbete[1] + int(noTarimas.get())
             numerosMarbetes = leerNumerosMarbetes()
@@ -213,4 +213,5 @@ def actualizarJSON(numeros, key, aumento):
 articulosShop = {}
 listaDatos = []
 codigoMarbete = ['', 0]
+
 # pestañaPersonal = None

@@ -27,5 +27,11 @@ def menuConfiguracion(pestaña):
         command=abrirArchivo)
     labelArchivo.pack()
     
+    botonLimpiar = ttk.Button(
+        pestaña,
+        text='Limpiar',
+        command=reiniciarContador()
+    )
+    botonLimpiar.pack()
     
 # pestañaConfiguracion = saludo()
