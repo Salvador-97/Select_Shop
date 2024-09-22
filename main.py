@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 from editPersonal import *
+from configuracion import *
 
 leerCSV()
 
@@ -32,11 +33,14 @@ pestañas.pack(fill='both', expand='yes')
 
 pestañaPersonal = ttk.Frame(pestañas)
 pestañaTiempoExtra = ttk.Frame(pestañas)
+pestañaConfiguracion = ttk.Frame(pestañas)
 
 pestañas.add(pestañaPersonal, text='Personal')
 pestañas.add(pestañaTiempoExtra, text='Tiempo Extra')
+pestañas.add(pestañaConfiguracion, text='Configuración')
 
 obtenerPestañas(pestañaPersonal)
+menuConfiguracion(pestañaConfiguracion)
 # guardarDatos(pestañaPersonal)
 
 app.mainloop()

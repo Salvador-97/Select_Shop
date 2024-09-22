@@ -6,8 +6,9 @@ import json
 import csv
 import re
 from editExcel import editarExcel
+from editExcel import bookPath
 
-def crearCampo(texto, coordenadaX, coordenadaY):
+def crearCampo(pestañaPersonal, texto, coordenadaX, coordenadaY):
     labelAux = Label(pestañaPersonal, text=texto, justify='center')
     labelAux.place(relx=coordenadaX, rely=coordenadaY)
     campoAux = ttk.Entry(pestañaPersonal, justify='center')
@@ -38,10 +39,10 @@ def obtenerPestañas(pestaña):
         )
     boton.pack()
     
-    barras = crearCampo('Codigo de barras', 0.2, 0.16)
-    estiba = crearCampo('Productos por tarima', 0.6, 0.16)
-    noProductos = crearCampo('Cajas por tarima', 0.2, 0.26)
-    masterPack = crearCampo('Master Pack', 0.6, 0.26)
+    barras = crearCampo(pestañaPersonal, 'Codigo de barras', 0.2, 0.16)
+    estiba = crearCampo(pestañaPersonal,'Productos por tarima', 0.6, 0.16)
+    noProductos = crearCampo(pestañaPersonal,'Cajas por tarima', 0.2, 0.26)
+    masterPack = crearCampo(pestañaPersonal,'Master Pack', 0.6, 0.26)
     
     labelDescripcion = Label(pestañaPersonal, text='Descripcion', justify='center')
     labelDescripcion.place(relx=0.45, rely=0.32)
@@ -57,7 +58,7 @@ def obtenerPestañas(pestaña):
         
     separator = ttk.Separator(pestañaPersonal, orient='horizontal')
     separator.place(relx=0, rely=0.5, relwidth=1, relheight=1)
-    guardarDatos(campoCodigo, barras, estiba, noProductos, masterPack, descripcion)
+    guardarDatos(pestañaPersonal, campoCodigo, barras, estiba, noProductos, masterPack, descripcion)
 
 def habilitarEdicion(descripcion, barras, estiba, noProductos, masterPack):
     barras.config(state='enabled')
@@ -90,14 +91,14 @@ def informacionArticulo(listaInfoArticulo, descripcion, barras, estiba, noProduc
     masterPack.insert(0, listaInfoArticulo[4])
     deshabilitarEdicion(descripcion, barras, estiba, noProductos, masterPack)
     
-def guardarDatos(campoCodigo, barras, estiba, noProductos, masterPack, descripcion):
+def guardarDatos(pestañaPersonal, campoCodigo, barras, estiba, noProductos, masterPack, descripcion):
     
-    contenedor = crearCampo('Contenedor', 0.2, 0.54)
-    fecha = crearCampo('Fecha', 0.6, 0.54)
-    proveedor = crearCampo('Proveedor', 0.2, 0.64)
-    noTarimas = crearCampo('Numero de tarimas', 0.6, 0.64)
-    resto = crearCampo('Resto', 0.2, 0.74)
-    ubicacion = crearCampo('Ubicación', 0.6, 0.74)
+    contenedor = crearCampo(pestañaPersonal, 'Contenedor', 0.2, 0.54)
+    fecha = crearCampo(pestañaPersonal, 'Fecha', 0.6, 0.54)
+    proveedor = crearCampo(pestañaPersonal, 'Proveedor', 0.2, 0.64)
+    noTarimas = crearCampo(pestañaPersonal, 'Numero de tarimas', 0.6, 0.64)
+    resto = crearCampo(pestañaPersonal, 'Resto', 0.2, 0.74)
+    ubicacion = crearCampo(pestañaPersonal, 'Ubicación', 0.6, 0.74)
     
     botonAgregar = ttk.Button(
         pestañaPersonal, 
@@ -135,15 +136,14 @@ def editarSheet(contenedor, noTarimas, resto, fecha, proveedor,
     validacionCampos.append(validacionDatos('[A-Z][0-9][0-9][0-9]', proveedor))    
     validacionCampos.append(validacionDatos('[A-Z][A-Z][A-Z][A-Z][0-9][0-9][0-9][0-9][0-9][0-9][0-9]', contenedor))
     validacionCampos.append(validacionDatos('[A-Z][1-9][0-9]*A[1-9][0-9]*', ubicacion))
-    
+        
     if(validacionCampos.count(False) == 0):
+        print(f'BookPath: {bookPath}')
         indiceFinal = codigoMarbete[1] + int(noTarimas.get())
-        # print(listaDatos)
         for i in range(codigoMarbete[1], indiceFinal, 1):
             marbetes.append(codigoMarbete[0] + str(i))
             
             if((i == indiceFinal - 1) and (resto.get() != '0')):
-                print("Primer IF")
                 if((masterPack.get() != 'N/A') and (resto.get() != '0')):
                     listaDatos[1] = int(masterPack.get()) * int(resto.get())
                     listaDatos[2] = resto.get()
@@ -210,4 +210,4 @@ def actualizarJSON(numeros, key, aumento):
 articulosShop = {}
 listaDatos = []
 codigoMarbete = ['', 0]
-pestañaPersonal = None
+# pestañaPersonal = None
