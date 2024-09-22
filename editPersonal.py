@@ -5,7 +5,6 @@ from tkinter import scrolledtext as scroll
 import json
 import csv
 import re
-from editSheet import agregarDatos
 from editExcel import editarExcel
 
 def crearCampo(texto, coordenadaX, coordenadaY):
@@ -146,27 +145,14 @@ def editarSheet(contenedor, noTarimas, resto, fecha, proveedor,
             if((i == indiceFinal - 1) and (resto.get() != '0')):
                 print("Primer IF")
                 if((masterPack.get() != 'N/A') and (resto.get() != '0')):
-                    print("Segundo IF")
-                    # print(f"Calculo: {int(masterPack.get()) * int(resto.get())}")
-                    # print(f"Resto: {resto.get()}\n MasterPack: {masterPack.get()}")
-                    # print(f"Lista Datos 1: {listaDatos[1]}")
                     listaDatos[1] = int(masterPack.get()) * int(resto.get())
                     listaDatos[2] = resto.get()
                     print(listaDatos)
-                    # editarExcel(codigoMarbete[0] + str(i), listaDatos)
-                    agregarDatos(codigoMarbete[0] + str(i), listaDatos)
-            #     listaDatos[2] = resto.get()
-            #     print(listaDatos)
+                    editarExcel(codigoMarbete[0] + str(i), listaDatos)
                 else:
-                    print("Segundo ELSE")
-                    # editarExcel(codigoMarbete[0] + str(i), listaDatos)
-                    agregarDatos(codigoMarbete[0] + str(i), listaDatos)
+                    editarExcel(codigoMarbete[0] + str(i), listaDatos)
             else:
-                print("Primer ELSE")
-            # marbetesGenerados.tag_config("tag_name", justify='center')
-            # marbetesGenerados.insert(INSERT, codigoMarbete[0] + str(i) + '\n')
-                # editarExcel(codigoMarbete[0] + str(i), listaDatos)
-                agregarDatos(codigoMarbete[0] + str(i), listaDatos)
+                editarExcel(codigoMarbete[0] + str(i), listaDatos)
             
         messagebox.showinfo("Marbetes", "Marbetes generados exitosamente")
         codigoMarbete[1] = codigoMarbete[1] + int(noTarimas.get())
@@ -197,7 +183,7 @@ def verificacionInformacionArticulo(campoCodigo, descripcion, barras, estiba, no
         messagebox.showerror("Error", "Código no valido")
 
 def leerCSV():
-    with open('ArticulosSelectShop.csv') as articulos:
+    with open('files/ArticulosSelectShop.csv') as articulos:
         csv_reader = csv.reader(articulos, delimiter = ',')
         next(csv_reader)
         

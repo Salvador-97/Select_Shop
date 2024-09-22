@@ -4,7 +4,7 @@ from google.oauth2 import service_account
 from datetime import date
 
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
-KEY = 'key.json'
+KEY = 'files/key.json'
 SPREADSHEET_ID = '1JKlG3KTUdhdG_5-AsKA40BRGw0P8E4QAaFH_kIRDwQk'
 
 creds = None
