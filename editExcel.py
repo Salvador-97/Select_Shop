@@ -5,6 +5,9 @@ def archivoEditable(ruta):
     bookPath = ruta
     print(f'Funcion editExcel path: {bookPath}')
 
+def ruta():
+    return bookPath
+
 def editarExcel(marbete, listaDatos):
     print(f'Archivo editExcel path: {bookPath}')
     print(f'Marbete: {marbete}')

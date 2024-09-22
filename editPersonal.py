@@ -5,8 +5,9 @@ from tkinter import scrolledtext as scroll
 import json
 import csv
 import re
-from editExcel import editarExcel
+from editExcel import *
 from editExcel import bookPath
+
 
 def crearCampo(pestañaPersonal, texto, coordenadaX, coordenadaY):
     labelAux = Label(pestañaPersonal, text=texto, justify='center')
@@ -119,49 +120,51 @@ def validacionDatos(expresionRegular, campoVerificar):
 
 def editarSheet(contenedor, noTarimas, resto, fecha, proveedor, 
                 campoCodigo, barras, estiba, noProductos, masterPack, descripcion, ubicacion):
-    
-    marbetes = []
-    validacionCampos = []
-    
-    listaDatos.append(campoCodigo.get().upper())
-    listaDatos.append(estiba.get())
-    listaDatos.append(noProductos.get())
-    listaDatos.append(descripcion.get())
-    listaDatos.append(barras.get())
-    listaDatos.append(masterPack.get())
-    
-    validacionCampos.append(validacionDatos('[0-9][0-9]*[0-9]*', noTarimas))
-    validacionCampos.append(validacionDatos('[0-9][0-9]*[0-9]*', resto))
-    validacionCampos.append(validacionDatos('(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0,1,2])\/(19|20)\d{2}', fecha))    
-    validacionCampos.append(validacionDatos('[A-Z][0-9][0-9][0-9]', proveedor))    
-    validacionCampos.append(validacionDatos('[A-Z][A-Z][A-Z][A-Z][0-9][0-9][0-9][0-9][0-9][0-9][0-9]', contenedor))
-    validacionCampos.append(validacionDatos('[A-Z][1-9][0-9]*A[1-9][0-9]*', ubicacion))
+    if (ruta() == ''):
+        messagebox.showwarning('Alerta', 'Seleccione un archivo para editar.')
+    else:
+        marbetes = []
+        validacionCampos = []
         
-    if(validacionCampos.count(False) == 0):
-        print(f'BookPath: {bookPath}')
-        indiceFinal = codigoMarbete[1] + int(noTarimas.get())
-        for i in range(codigoMarbete[1], indiceFinal, 1):
-            marbetes.append(codigoMarbete[0] + str(i))
+        listaDatos.append(campoCodigo.get().upper())
+        listaDatos.append(estiba.get())
+        listaDatos.append(noProductos.get())
+        listaDatos.append(descripcion.get())
+        listaDatos.append(barras.get())
+        listaDatos.append(masterPack.get())
+        
+        validacionCampos.append(validacionDatos('[0-9][0-9]*[0-9]*', noTarimas))
+        validacionCampos.append(validacionDatos('[0-9][0-9]*[0-9]*', resto))
+        validacionCampos.append(validacionDatos('(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0,1,2])\/(19|20)\d{2}', fecha))    
+        validacionCampos.append(validacionDatos('[A-Z][0-9][0-9][0-9]', proveedor))    
+        validacionCampos.append(validacionDatos('[A-Z][A-Z][A-Z][A-Z][0-9][0-9][0-9][0-9][0-9][0-9][0-9]', contenedor))
+        validacionCampos.append(validacionDatos('[A-Z][1-9][0-9]*A[1-9][0-9]*', ubicacion))
             
-            if((i == indiceFinal - 1) and (resto.get() != '0')):
-                if((masterPack.get() != 'N/A') and (resto.get() != '0')):
-                    listaDatos[1] = int(masterPack.get()) * int(resto.get())
-                    listaDatos[2] = resto.get()
-                    print(listaDatos)
-                    editarExcel(codigoMarbete[0] + str(i), listaDatos)
+        if(validacionCampos.count(False) == 0):
+            print(f'BookPath: {bookPath}')
+            indiceFinal = codigoMarbete[1] + int(noTarimas.get())
+            for i in range(codigoMarbete[1], indiceFinal, 1):
+                marbetes.append(codigoMarbete[0] + str(i))
+                
+                if((i == indiceFinal - 1) and (resto.get() != '0')):
+                    if((masterPack.get() != 'N/A') and (resto.get() != '0')):
+                        listaDatos[1] = int(masterPack.get()) * int(resto.get())
+                        listaDatos[2] = resto.get()
+                        print(listaDatos)
+                        editarExcel(codigoMarbete[0] + str(i), listaDatos)
+                    else:
+                        editarExcel(codigoMarbete[0] + str(i), listaDatos)
                 else:
                     editarExcel(codigoMarbete[0] + str(i), listaDatos)
-            else:
-                editarExcel(codigoMarbete[0] + str(i), listaDatos)
-            
-        messagebox.showinfo("Marbetes", "Marbetes generados exitosamente")
-        codigoMarbete[1] = codigoMarbete[1] + int(noTarimas.get())
-        numerosMarbetes = leerNumerosMarbetes()
-        actualizarJSON(numerosMarbetes, codigoMarbete[0], int(noTarimas.get()))
-        listaDatos.clear()
-    else:
-        messagebox.showerror('Error', 'Dato erróneo, verificar campos')
-    
+                
+            messagebox.showinfo("Marbetes", "Marbetes generados exitosamente")
+            codigoMarbete[1] = codigoMarbete[1] + int(noTarimas.get())
+            numerosMarbetes = leerNumerosMarbetes()
+            actualizarJSON(numerosMarbetes, codigoMarbete[0], int(noTarimas.get()))
+            listaDatos.clear()
+        else:
+            messagebox.showerror('Error', 'Dato erróneo, verificar campos')
+        
     
 def verificacionInformacionArticulo(campoCodigo, descripcion, barras, estiba, noProductos, masterPack):
 

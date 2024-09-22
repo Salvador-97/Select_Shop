@@ -3,7 +3,11 @@ from tkinter import ttk
 from tkinter import messagebox
 from tkinter import filedialog
 from pathlib import Path
-from editExcel import archivoEditable
+from editExcel import *
+
+def configuracionRutaArchivo():
+    if (bookPath == ''):
+        messagebox.showwarning('Alerta', 'Seleccione un archivo para editar.')
 
 def abrirArchivo():
     archivo = filedialog.askopenfilename()
@@ -11,7 +15,7 @@ def abrirArchivo():
     if archivo:
         archivoEditable(archivo)
     else:
-        print('No se ha seleccionado nada')
+        configuracionRutaArchivo()
 
 def menuConfiguracion(pestaña):
     labelConfig = Label(pestaña, text="Configuraciones", justify='center') 

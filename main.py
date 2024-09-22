@@ -39,6 +39,8 @@ pestañas.add(pestañaPersonal, text='Personal')
 pestañas.add(pestañaTiempoExtra, text='Tiempo Extra')
 pestañas.add(pestañaConfiguracion, text='Configuración')
 
+configuracionRutaArchivo()
+
 obtenerPestañas(pestañaPersonal)
 menuConfiguracion(pestañaConfiguracion)
 # guardarDatos(pestañaPersonal)
