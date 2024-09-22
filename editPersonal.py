@@ -6,6 +6,7 @@ import json
 import csv
 import re
 from editSheet import agregarDatos
+from editExcel import editarExcel
 
 def crearCampo(texto, coordenadaX, coordenadaY):
     labelAux = Label(pestañaPersonal, text=texto, justify='center')
@@ -134,7 +135,7 @@ def editarSheet(contenedor, noTarimas, resto, fecha, proveedor,
     validacionCampos.append(validacionDatos('(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0,1,2])\/(19|20)\d{2}', fecha))    
     validacionCampos.append(validacionDatos('[A-Z][0-9][0-9][0-9]', proveedor))    
     validacionCampos.append(validacionDatos('[A-Z][A-Z][A-Z][A-Z][0-9][0-9][0-9][0-9][0-9][0-9][0-9]', contenedor))
-    validacionCampos.append(validacionDatos('[A-Z][1-9][0-9]A[1-9][0-9]', ubicacion))
+    validacionCampos.append(validacionDatos('[A-Z][1-9][0-9]*A[1-9][0-9]*', ubicacion))
     
     if(validacionCampos.count(False) == 0):
         indiceFinal = codigoMarbete[1] + int(noTarimas.get())
@@ -152,16 +153,19 @@ def editarSheet(contenedor, noTarimas, resto, fecha, proveedor,
                     listaDatos[1] = int(masterPack.get()) * int(resto.get())
                     listaDatos[2] = resto.get()
                     print(listaDatos)
+                    # editarExcel(codigoMarbete[0] + str(i), listaDatos)
                     agregarDatos(codigoMarbete[0] + str(i), listaDatos)
             #     listaDatos[2] = resto.get()
             #     print(listaDatos)
                 else:
                     print("Segundo ELSE")
+                    # editarExcel(codigoMarbete[0] + str(i), listaDatos)
                     agregarDatos(codigoMarbete[0] + str(i), listaDatos)
             else:
                 print("Primer ELSE")
             # marbetesGenerados.tag_config("tag_name", justify='center')
             # marbetesGenerados.insert(INSERT, codigoMarbete[0] + str(i) + '\n')
+                # editarExcel(codigoMarbete[0] + str(i), listaDatos)
                 agregarDatos(codigoMarbete[0] + str(i), listaDatos)
             
         messagebox.showinfo("Marbetes", "Marbetes generados exitosamente")
