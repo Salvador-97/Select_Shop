@@ -7,7 +7,8 @@ leerCSV()
 
 # Ventana principal
 app = Tk()
-app.geometry("900x900")
+# app.geometry("700x600")
+app.geometry("900x800")
 app.title("Select Shop Inbound")
 # app.resizable(False, False)
 
@@ -32,17 +33,21 @@ pestañas = ttk.Notebook(app)
 pestañas.pack(fill='both', expand='yes')
 
 pestañaPersonal = ttk.Frame(pestañas)
-pestañaTiempoExtra = ttk.Frame(pestañas)
+pestañaSSWMSOK = ttk.Frame(pestañas)
+# pestañaTiempoExtra = ttk.Frame(pestañas)
 pestañaConfiguracion = ttk.Frame(pestañas)
 
 pestañas.add(pestañaPersonal, text='Personal')
-pestañas.add(pestañaTiempoExtra, text='Tiempo Extra')
+pestañas.add(pestañaSSWMSOK, text='SSWMSOK')
+# pestañas.add(pestañaTiempoExtra, text='Tiempo Extra')
 pestañas.add(pestañaConfiguracion, text='Configuración')
 
-configuracionRutaArchivo()
+# configuracionRutaArchivo()
 
 obtenerPestañas(pestañaPersonal)
+menuExcel(pestañaSSWMSOK)
 menuConfiguracion(pestañaConfiguracion)
+
 # guardarDatos(pestañaPersonal)
 
 app.mainloop()

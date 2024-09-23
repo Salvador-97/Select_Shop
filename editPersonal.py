@@ -6,14 +6,15 @@ import json
 import csv
 import re
 from editExcel import *
+from tools.manejarWidgets import *
 from editExcel import bookPath
 
-def crearCampo(pestañaPersonal, texto, coordenadaX, coordenadaY):
-    labelAux = Label(pestañaPersonal, text=texto, justify='center')
-    labelAux.place(relx=coordenadaX, rely=coordenadaY)
-    campoAux = ttk.Entry(pestañaPersonal, justify='center')
-    campoAux.place(relx=coordenadaX, rely=coordenadaY + 0.04)
-    return campoAux
+# def crearCampo(pestañaPersonal, texto, coordenadaX, coordenadaY):
+#     labelAux = Label(pestañaPersonal, text=texto, justify='center')
+#     labelAux.place(relx=coordenadaX, rely=coordenadaY)
+#     campoAux = ttk.Entry(pestañaPersonal, justify='center')
+#     campoAux.place(relx=coordenadaX, rely=coordenadaY + 0.04)
+#     return campoAux
 
 def extraerNumero(codigo):
     numerosMarbetes = leerNumerosMarbetes()
@@ -59,37 +60,6 @@ def obtenerPestañas(pestaña):
     separator = ttk.Separator(pestañaPersonal, orient='horizontal')
     separator.place(relx=0, rely=0.5, relwidth=1, relheight=1)
     guardarDatos(pestañaPersonal, campoCodigo, barras, estiba, noProductos, masterPack, descripcion)
-
-def habilitarEdicion(descripcion, barras, estiba, noProductos, masterPack):
-    barras.config(state='enabled')
-    descripcion.config(state='enabled')
-    estiba.config(state='enabled')
-    noProductos.config(state='enabled')
-    masterPack.config(state='enabled')
-    
-def deshabilitarEdicion(descripcion, barras, estiba, noProductos, masterPack):
-     descripcion.config(state='disabled')
-     barras.config(state='disabled')
-     estiba.config(state='disabled')
-     noProductos.config(state='disabled')
-     masterPack.config(state='disabled')
-
-
-def informacionArticulo(listaInfoArticulo, descripcion, barras, estiba, noProductos, masterPack):
-    if((barras.get() != '') or (descripcion.get() != '')):
-        habilitarEdicion(descripcion, barras, estiba, noProductos, masterPack)
-        barras.delete(0, END)
-        descripcion.delete(0, END)
-        estiba.delete(0, END)
-        noProductos.delete(0, END)
-        masterPack.delete(0, END)   
-        
-    descripcion.insert(0, listaInfoArticulo[0])
-    barras.insert(0, listaInfoArticulo[1])
-    estiba.insert(0, listaInfoArticulo[2])
-    noProductos.insert(0, listaInfoArticulo[3])
-    masterPack.insert(0, listaInfoArticulo[4])
-    deshabilitarEdicion(descripcion, barras, estiba, noProductos, masterPack)
     
 def guardarDatos(pestañaPersonal, campoCodigo, barras, estiba, noProductos, masterPack, descripcion):
     
@@ -142,29 +112,33 @@ def editarSheet(contenedor, noTarimas, resto, fecha, proveedor,
         if(validacionCampos.count(False) == 0):
             # print(f'BookPath: {bookPath}')
             indiceFinal = codigoMarbete[1] + int(noTarimas.get())
-
+            # contador = 1
             for i in range(codigoMarbete[1], indiceFinal, 1):
                 marbetes.append(codigoMarbete[0] + str(i))
                 
                 if((i == indiceFinal - 1) and (resto.get() != '0')):
                     if((masterPack.get() != 'N/A') and (resto.get() != '0')):
                         listaDatos[1] = int(masterPack.get()) * int(resto.get())
+                        listaDatos[7] = listaDatos[1]
                         listaDatos[2] = resto.get()
-                        print(listaDatos)
-                        editarExcel(listaDatos, contador)
+                        # print(listaDatos)
+                        editarExcel(listaDatos)
                     else:
-                        editarExcel(listaDatos, contador)
+                        listaDatos[1] = listaDatos[7]
+                        listaDatos[2] = listaDatos[7]
+                        editarExcel(listaDatos)
                 else:
-                    editarExcel(listaDatos, contador)
-                contador = contador + 1
+                    editarExcel(listaDatos)
+                # contador = contador + 1
             messagebox.showinfo("Marbetes", "Marbetes generados exitosamente")
             codigoMarbete[1] = codigoMarbete[1] + int(noTarimas.get())
             numerosMarbetes = leerNumerosMarbetes()
             actualizarJSON(numerosMarbetes, codigoMarbete[0], int(noTarimas.get()))
             listaDatos.clear()
+            guardarExcel()
         else:
             messagebox.showerror('Error', 'Dato erróneo, verificar campos')
-        
+        cerrarExcel()   
     
 def verificacionInformacionArticulo(campoCodigo, descripcion, barras, estiba, noProductos, masterPack):
 
