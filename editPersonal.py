@@ -8,13 +8,7 @@ import re
 from editExcel import *
 from tools.manejarWidgets import *
 from editExcel import bookPath
-
-# def crearCampo(pestañaPersonal, texto, coordenadaX, coordenadaY):
-#     labelAux = Label(pestañaPersonal, text=texto, justify='center')
-#     labelAux.place(relx=coordenadaX, rely=coordenadaY)
-#     campoAux = ttk.Entry(pestañaPersonal, justify='center')
-#     campoAux.place(relx=coordenadaX, rely=coordenadaY + 0.04)
-#     return campoAux
+from editPersonalExcel import *
 
 def extraerNumero(codigo):
     numerosMarbetes = leerNumerosMarbetes()
@@ -118,17 +112,25 @@ def editarSheet(contenedor, noTarimas, resto, fecha, proveedor,
                 
                 if((i == indiceFinal - 1) and (resto.get() != '0')):
                     if((masterPack.get() != 'N/A') and (resto.get() != '0')):
+                        print("1")
                         listaDatos[1] = int(masterPack.get()) * int(resto.get())
                         listaDatos[7] = listaDatos[1]
                         listaDatos[2] = resto.get()
-                        # print(listaDatos)
+                        print(listaDatos)
                         editarExcel(listaDatos)
+                        editMarbetes(codigoMarbete[0] + str(i), listaDatos)
                     else:
+                        print("2")
+                        print(listaDatos)
                         listaDatos[1] = listaDatos[7]
                         listaDatos[2] = listaDatos[7]
                         editarExcel(listaDatos)
+                        editMarbetes(codigoMarbete[0] + str(i), listaDatos)
                 else:
+                    print("3")
+                    print(listaDatos)
                     editarExcel(listaDatos)
+                    editMarbetes(codigoMarbete[0] + str(i), listaDatos)
                 # contador = contador + 1
             messagebox.showinfo("Marbetes", "Marbetes generados exitosamente")
             codigoMarbete[1] = codigoMarbete[1] + int(noTarimas.get())
@@ -136,9 +138,11 @@ def editarSheet(contenedor, noTarimas, resto, fecha, proveedor,
             actualizarJSON(numerosMarbetes, codigoMarbete[0], int(noTarimas.get()))
             listaDatos.clear()
             guardarExcel()
+            guardarExcelMarbete()
         else:
             messagebox.showerror('Error', 'Dato erróneo, verificar campos')
-        cerrarExcel()   
+        cerrarExcel()
+        cerrarExcelMarbete()
     
 def verificacionInformacionArticulo(campoCodigo, descripcion, barras, estiba, noProductos, masterPack):
 

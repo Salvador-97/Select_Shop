@@ -53,10 +53,10 @@ BB25C1,Silla Mecedora Musical con juguetes para Bebe Mod. LB,7503049746838,135,9
 BB25C22,Silla Mecedora Musical con juguetes para Bebe Mod. LB,7503049746746,135,9,Master
 BB25C31,Silla Mecedora Musical con juguetes para Bebe Mod. LB,,135,9,Master
 BB25C4,Silla Mecedora Musical con juguetes para Bebe Mod. LB,7503049746760,135,9,Master
-BB26C22,Carriola para Bebé Basica ND-AT Rosa,7503050822187,84,14,Caja Master de 6 Piezas
-BB26C31,Carriola para Bebé Basica ND-AT Verde,7503050822064,84,14,Caja Master de 6 Piezas
-BB26C4,Carriola para Bebé Basica ND-AT Gris,7503050822088,84,14,Caja Master de 6 Piezas
-BB26C7,Carriola para Bebé Basica ND-AT Beige,7503050822071,84,14,Caja Master de 6 Piezas
+BB26C22,Carriola para Bebé Basica ND-AT Rosa,7503050822187,84,14,6
+BB26C31,Carriola para Bebé Basica ND-AT Verde,7503050822064,84,14,6
+BB26C4,Carriola para Bebé Basica ND-AT Gris,7503050822088,84,14,6
+BB26C7,Carriola para Bebé Basica ND-AT Beige,7503050822071,84,14,6
 BB2C8,Silla Alta Periquera para Bebe Mod.1 Azul,7503040000000,42,42,N/A
 BB3C22,Silla Mecedora Electrica Bebé Rosa,7503041710172,70,70,N/A
 BB3C4,Mecedora Electrica para Bebé Gris,7503040000000,55,55,N/A
@@ -77,7 +77,7 @@ EA3C1,,,,,
 EA3C4,,,,,
 EA3C8,,,,,
 EL4C6,Maquina para Waffles de 110V AY,7503044475368,54,54,
-EL8C5,Cafetera Tetera Metalica Electrica de 1000w y 1.8l Plata,7503049746395,320,20,Master
+EL8C5,Cafetera Tetera Metalica Electrica de 1000w y 1.8l Plata,7503049746395,320,20,16
 EL10C1,Refrigerador BC-46 Negro,7503050822033,24,24,N/A
 EL11C1,Campana Extractor de 50cm Negra,7503050822040,72,72,N/A
 EL11C5,Campana Extractor de 50cm Plata,7503050822057,72,72,N/A
@@ -88,7 +88,6 @@ EL14C6,Congelador BD-150C Blanco,7503050822583,12,12,N/A
 EL15C1,Licuadora de 1350W de 2l de Plastico Negra,7503051484094,108,18,6
 EL15C12,Licuadora de 1350W de 2l de Plastico Roja,7503051484100,108,18,6
 EL3C6,Calentador de Paso de 6L Blanco,7503044475351,78,78,N/A
-EL8C5,Cafetera Tetera Metalica Electrica de 1000w y 1.8l Plata,7503049746395,320,20,16
 EL9C1,Refrigerador BC-90 Negro,7503050822026,12,12,N/A
 ET1C1,,,,,
 ET2C1,Pantallas Led 43,7503050822538,48,48,N/A
