@@ -8,9 +8,9 @@ leerCSV()
 # Ventana principal
 app = Tk()
 # app.geometry("700x600")
-app.geometry("900x800")
+app.geometry("600x600")
 app.title("Select Shop Inbound")
-# app.resizable(False, False)
+app.resizable(False, False)
 
 app.update()
 

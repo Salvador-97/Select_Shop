@@ -32,7 +32,7 @@ def informacionArticulo(listaInfoArticulo, descripcion, barras, estiba, noProduc
         estiba.delete(0, END)
         noProductos.delete(0, END)
         masterPack.delete(0, END)   
-        
+    
     descripcion.insert(0, listaInfoArticulo[0])
     barras.insert(0, listaInfoArticulo[1])
     estiba.insert(0, listaInfoArticulo[2])

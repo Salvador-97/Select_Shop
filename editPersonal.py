@@ -5,6 +5,7 @@ from tkinter import scrolledtext as scroll
 import json
 import csv
 import re
+from editSheet import *
 from editExcel import *
 from tools.manejarWidgets import *
 from editExcel import bookPath
@@ -14,6 +15,7 @@ def extraerNumero(codigo):
     numerosMarbetes = leerNumerosMarbetes()
     codigoSKU = list(codigo)
     codigoAbreviado = codigoSKU[0] + codigoSKU[1]
+    #Agregar funcion de verificacion de la clave en JSON de marbetes
     numero = numerosMarbetes[codigoAbreviado]
 
     codigoMarbete[0] = codigoAbreviado
@@ -61,7 +63,7 @@ def guardarDatos(pestañaPersonal, campoCodigo, barras, estiba, noProductos, mas
     fecha = crearCampo(pestañaPersonal, 'Fecha', 0.6, 0.54)
     proveedor = crearCampo(pestañaPersonal, 'Proveedor', 0.2, 0.64)
     noTarimas = crearCampo(pestañaPersonal, 'Numero de tarimas', 0.6, 0.64)
-    resto = crearCampo(pestañaPersonal, 'Resto', 0.2, 0.74)
+    resto = crearCampo(pestañaPersonal, 'Resto (Cajas)', 0.2, 0.74)
     ubicacion = crearCampo(pestañaPersonal, 'Ubicación', 0.6, 0.74)
     
     botonAgregar = ttk.Button(
@@ -118,6 +120,7 @@ def editarSheet(contenedor, noTarimas, resto, fecha, proveedor,
                         listaDatos[2] = resto.get()
                         print(listaDatos)
                         editarExcel(listaDatos)
+                        agregarDatos(codigoMarbete[0] + str(i), listaDatos)
                         editMarbetes(codigoMarbete[0] + str(i), listaDatos)
                     else:
                         print("2")
@@ -125,11 +128,13 @@ def editarSheet(contenedor, noTarimas, resto, fecha, proveedor,
                         listaDatos[1] = listaDatos[7]
                         listaDatos[2] = listaDatos[7]
                         editarExcel(listaDatos)
+                        agregarDatos(codigoMarbete[0] + str(i), listaDatos)
                         editMarbetes(codigoMarbete[0] + str(i), listaDatos)
                 else:
                     print("3")
                     print(listaDatos)
                     editarExcel(listaDatos)
+                    agregarDatos(codigoMarbete[0] + str(i), listaDatos)
                     editMarbetes(codigoMarbete[0] + str(i), listaDatos)
                 # contador = contador + 1
             messagebox.showinfo("Marbetes", "Marbetes generados exitosamente")
@@ -164,12 +169,17 @@ def verificacionInformacionArticulo(campoCodigo, descripcion, barras, estiba, no
         messagebox.showerror("Error", "Código no valido")
 
 def leerCSV():
-    with open('files/ArticulosSelectShop.csv') as articulos:
+    with open('files/ArticulosSelectShop.csv', 'r', encoding='utf-8') as articulos:
         csv_reader = csv.reader(articulos, delimiter = ',')
         next(csv_reader)
         
         for fila in csv_reader:
-            listaInformacion = [fila[1], fila[2], fila[3], fila[4], fila[5]]
+            listaInformacion = [
+                fila[1].encode('utf-8'), 
+                fila[2].encode('utf-8'), 
+                fila[3].encode('utf-8'), 
+                fila[4].encode('utf-8'), 
+                fila[5].encode('utf-8')]
             diccionarioAux = {fila[0]: listaInformacion}
             articulosShop.update(diccionarioAux)
             diccionarioAux = {}

@@ -35,4 +35,9 @@ def menuConfiguracion(pestaña):
         command=abrirArchivo)
     archivo.place(relx=0.4, rely=0.15)
     
+    labelArchivo = Label(pestaña, text='Link de Drive Personal')
+    labelArchivo.place(relx=0.4, rely=0.25)
+    archivo = ttk.Entry(pestaña)
+    archivo.place(relx=0.4, rely=0.3)
+
 # pestañaConfiguracion = saludo()
