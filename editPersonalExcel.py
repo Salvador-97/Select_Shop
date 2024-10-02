@@ -1,6 +1,7 @@
 import openpyxl
 
 def editMarbetes(marbete, listaDatos):
+    #Agregar opcion de elegir la pestaña del archivo de excel
     global book
     book = openpyxl.load_workbook('files/Pruebas_Excel.xlsx')
     sheet = book['Prueba']

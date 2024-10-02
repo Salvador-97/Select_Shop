@@ -8,10 +8,15 @@ import re
 from editSheet import *
 from editExcel import *
 from tools.manejarWidgets import *
-from editExcel import bookPath
 from editPersonalExcel import *
 
 def extraerNumero(codigo):
+    """
+    Función que extrae los primeros dos caracteres del código ingresado por el usuario. 
+    Seguido de esto los concatena y lo busca en la lista del registro de marbetes.
+    Por último, guarda el la categoria del producto (HG, EL, PO...) y el número
+    del último marbete generado para esa categoria.
+    """
     numerosMarbetes = leerNumerosMarbetes()
     codigoSKU = list(codigo)
     codigoAbreviado = codigoSKU[0] + codigoSKU[1]
@@ -22,6 +27,11 @@ def extraerNumero(codigo):
     codigoMarbete[1] = numero
 
 def obtenerPestañas(pestaña):
+    """
+    Genera todos los widgets de la pestaña para generar marbetes, mostrando cada uno de los 
+    campos que obtiene de buscar un código de un producto, dando la opción de poder editar
+    dichos campos.
+    """
     pestañaPersonal = pestaña
     
     labelCodigo = Label(pestañaPersonal, text='Codigo', justify='center')
@@ -42,23 +52,25 @@ def obtenerPestañas(pestaña):
     masterPack = crearCampo(pestañaPersonal,'Master Pack', 0.6, 0.26)
     
     labelDescripcion = Label(pestañaPersonal, text='Descripcion', justify='center')
-    labelDescripcion.place(relx=0.45, rely=0.32)
+    labelDescripcion.place(relx=0.45, rely=0.35)
     descripcion = ttk.Entry(pestañaPersonal, justify='center')
-    descripcion.place(relx=0.26, rely=0.36, relwidth=0.5)
+    descripcion.place(relx=0.26, rely=0.39, relwidth=0.5)
     
     botonEditar = ttk.Button(
         pestañaPersonal,
         text='Editar',
         command=lambda: habilitarEdicion(descripcion, barras, estiba, noProductos, masterPack)
     )
-    botonEditar.place(relx=0.45, rely=0.42)
+    botonEditar.place(relx=0.45, rely=0.45)
         
     separator = ttk.Separator(pestañaPersonal, orient='horizontal')
     separator.place(relx=0, rely=0.5, relwidth=1, relheight=1)
     guardarDatos(pestañaPersonal, campoCodigo, barras, estiba, noProductos, masterPack, descripcion)
     
 def guardarDatos(pestañaPersonal, campoCodigo, barras, estiba, noProductos, masterPack, descripcion):
-    
+    """
+    Crea los widgets de lo que ingresara el usuario para generar los marbetes
+    """
     contenedor = crearCampo(pestañaPersonal, 'Contenedor', 0.2, 0.54)
     fecha = crearCampo(pestañaPersonal, 'Fecha', 0.6, 0.54)
     proveedor = crearCampo(pestañaPersonal, 'Proveedor', 0.2, 0.64)
@@ -74,6 +86,8 @@ def guardarDatos(pestañaPersonal, campoCodigo, barras, estiba, noProductos, mas
     botonAgregar.place(relx=0.42, rely=0.84)
     
 def validacionDatos(expresionRegular, campoVerificar):
+    """Revisa el campo ingresado por el usuario a partir de una expresión regular
+    para así asegurar que los datos sean correctos"""
     campoMayus = campoVerificar.get().upper()
     resultado = re.findall(expresionRegular, campoMayus)
     if(resultado):
@@ -85,18 +99,15 @@ def validacionDatos(expresionRegular, campoVerificar):
 
 def editarSheet(contenedor, noTarimas, resto, fecha, proveedor, 
                 campoCodigo, barras, estiba, noProductos, masterPack, descripcion, ubicacion):
+    """
+    Obtiene los datos ingresados por el usuario y los agrega al archivo de Drive y Excel siempre 
+    y cuando los datos sean correctos.
+    """
     if (ruta() == ''):
         messagebox.showwarning('Alerta', 'Seleccione un archivo para editar.')
     else:
         marbetes = []
         validacionCampos = []
-        
-        listaDatos.append(campoCodigo.get().upper())
-        listaDatos.append(estiba.get())
-        listaDatos.append(noProductos.get())
-        listaDatos.append(descripcion.get())
-        listaDatos.append(barras.get())
-        listaDatos.append(masterPack.get())
         
         validacionCampos.append(validacionDatos('[0-9][0-9]*[0-9]*', noTarimas))
         validacionCampos.append(validacionDatos('[0-9][0-9]*[0-9]*', resto))
@@ -106,37 +117,41 @@ def editarSheet(contenedor, noTarimas, resto, fecha, proveedor,
         validacionCampos.append(validacionDatos('[A-Z][1-9][0-9]*A[1-9][0-9]*', ubicacion))
             
         if(validacionCampos.count(False) == 0):
-            # print(f'BookPath: {bookPath}')
             indiceFinal = codigoMarbete[1] + int(noTarimas.get())
-            # contador = 1
+            listaDatos.append(campoCodigo.get().upper())
+            listaDatos.append(estiba.get())
+            listaDatos.append(noProductos.get())
+            listaDatos.append(descripcion.get())
+            listaDatos.append(barras.get())
+            listaDatos.append(masterPack.get())
+
             for i in range(codigoMarbete[1], indiceFinal, 1):
                 marbetes.append(codigoMarbete[0] + str(i))
-                
+                """
+                Cuando llega a la última posición verifica el valor del resto
+                para para agregar esa cantidad en la columna correspondiente, en caso de que
+                el producto sea Master Pack se realiza la operación para calcular el total
+                de piezas
+                """
                 if((i == indiceFinal - 1) and (resto.get() != '0')):
                     if((masterPack.get() != 'N/A') and (resto.get() != '0')):
-                        print("1")
                         listaDatos[1] = int(masterPack.get()) * int(resto.get())
                         listaDatos[7] = listaDatos[1]
                         listaDatos[2] = resto.get()
-                        print(listaDatos)
                         editarExcel(listaDatos)
                         agregarDatos(codigoMarbete[0] + str(i), listaDatos)
                         editMarbetes(codigoMarbete[0] + str(i), listaDatos)
                     else:
-                        print("2")
-                        print(listaDatos)
                         listaDatos[1] = listaDatos[7]
                         listaDatos[2] = listaDatos[7]
                         editarExcel(listaDatos)
                         agregarDatos(codigoMarbete[0] + str(i), listaDatos)
                         editMarbetes(codigoMarbete[0] + str(i), listaDatos)
                 else:
-                    print("3")
-                    print(listaDatos)
                     editarExcel(listaDatos)
                     agregarDatos(codigoMarbete[0] + str(i), listaDatos)
                     editMarbetes(codigoMarbete[0] + str(i), listaDatos)
-                # contador = contador + 1
+
             messagebox.showinfo("Marbetes", "Marbetes generados exitosamente")
             codigoMarbete[1] = codigoMarbete[1] + int(noTarimas.get())
             numerosMarbetes = leerNumerosMarbetes()
@@ -150,7 +165,11 @@ def editarSheet(contenedor, noTarimas, resto, fecha, proveedor,
         cerrarExcelMarbete()
     
 def verificacionInformacionArticulo(campoCodigo, descripcion, barras, estiba, noProductos, masterPack):
-
+    """
+    Verifica que el código ingresado por el usuario conrresponda con el formato establecido de los 
+    códigos de los productos
+    """
+    #Agregar expresion para ADIR y productos faltantes
     codigoArticulo = campoCodigo.get()
     codigoArticulo = codigoArticulo.upper()
     comprobacionRegex = '[A-Z][A-Z][1-9][0-9]*[0-9]*C[1-9][0-9]*'
@@ -164,11 +183,15 @@ def verificacionInformacionArticulo(campoCodigo, descripcion, barras, estiba, no
             listaInfoArticulo = articulosShop.get(codigoArticulo)
             informacionArticulo(listaInfoArticulo, descripcion, barras, estiba, noProductos, masterPack)
         else:
-            messagebox.showwarning("Codigo no encontrado", "No se ha encontrado el producto")
+            messagebox.showwarning("Código no encontrado", "No se ha encontrado el producto\nIntente de nuevo")
     else:
-        messagebox.showerror("Error", "Código no valido")
+        messagebox.showerror("Error", "Código no válido")
 
 def leerCSV():
+    """
+    Lee el archivo de todos los productos para generar una lista que servira como consulta
+    """
+    #Agregar excepcion en caso de que no se pueda abrir o leer el archivo
     with open('files/ArticulosSelectShop.csv', 'r', encoding='utf-8') as articulos:
         csv_reader = csv.reader(articulos, delimiter = ',')
         next(csv_reader)
@@ -186,12 +209,18 @@ def leerCSV():
             listaInformacion = []
             
 def leerNumerosMarbetes():
+    """
+    Abre el archivo de los cantadores de cada una de las categorias de los productos
+    """
     with open("files/marbetesNumeros.json") as archivoJSON:
         numerosExtraidos = json.load(archivoJSON)
     archivoJSON.close()
     return numerosExtraidos
 
 def actualizarJSON(numeros, key, aumento):
+    """
+    Abre y edita el archivo de los contadores de cada una de las catergorias de lo productos
+    """
     if key in numeros:
         numeros[key] = numeros[key] + aumento
         with open("files/marbetesNumeros.json", "w") as archivoJSONedit:
@@ -201,5 +230,3 @@ def actualizarJSON(numeros, key, aumento):
 articulosShop = {}
 listaDatos = []
 codigoMarbete = ['', 0]
-
-# pestañaPersonal = None
