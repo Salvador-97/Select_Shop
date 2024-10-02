@@ -109,6 +109,14 @@ def editarSheet(contenedor, noTarimas, resto, fecha, proveedor,
         marbetes = []
         validacionCampos = []
         
+        indiceFinal = codigoMarbete[1] + int(noTarimas.get())
+        listaDatos.append(campoCodigo.get().upper())
+        listaDatos.append(estiba.get())
+        listaDatos.append(noProductos.get())
+        listaDatos.append(descripcion.get())
+        listaDatos.append(barras.get())
+        listaDatos.append(masterPack.get())
+        
         validacionCampos.append(validacionDatos('[0-9][0-9]*[0-9]*', noTarimas))
         validacionCampos.append(validacionDatos('[0-9][0-9]*[0-9]*', resto))
         validacionCampos.append(validacionDatos('(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0,1,2])\/(19|20)\d{2}', fecha))    
@@ -117,13 +125,7 @@ def editarSheet(contenedor, noTarimas, resto, fecha, proveedor,
         validacionCampos.append(validacionDatos('[A-Z][1-9][0-9]*A[1-9][0-9]*', ubicacion))
             
         if(validacionCampos.count(False) == 0):
-            indiceFinal = codigoMarbete[1] + int(noTarimas.get())
-            listaDatos.append(campoCodigo.get().upper())
-            listaDatos.append(estiba.get())
-            listaDatos.append(noProductos.get())
-            listaDatos.append(descripcion.get())
-            listaDatos.append(barras.get())
-            listaDatos.append(masterPack.get())
+            
 
             for i in range(codigoMarbete[1], indiceFinal, 1):
                 marbetes.append(codigoMarbete[0] + str(i))
