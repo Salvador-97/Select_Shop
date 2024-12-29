@@ -31,14 +31,19 @@ def guardarExcel():
 def cerrarExcel():
     book.close()
 
-def editarExcel(listaDatos):    
+# def editarExcel(listaDatos):    
+#     sheet = book['entarimadoLote']
+#     print(f"Celda {sheet.max_row}")
+
+#     nuevaCelda = sheet.max_row + 1
+#     sheet.cell(row=nuevaCelda, column=1, value=listaDatos[0])
+#     sheet.cell(row=nuevaCelda, column=2, value=listaDatos[11])
+#     sheet.cell(row=nuevaCelda, column=3, value=listaDatos[1])
+
+def editarExcel(sku, ubicacion, cantidad):
     sheet = book['entarimadoLote']
     print(f"Celda {sheet.max_row}")
 
-    nuevaCelda = sheet.max_row + 1
-    sheet.cell(row=nuevaCelda, column=1, value=listaDatos[0])
-    sheet.cell(row=nuevaCelda, column=2, value=listaDatos[11])
-    sheet.cell(row=nuevaCelda, column=3, value=listaDatos[1])
 
 bookPath = ''
 book = None

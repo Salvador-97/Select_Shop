@@ -19,7 +19,11 @@ def extraerNumero(codigo):
     """
     numerosMarbetes = leerNumerosMarbetes()
     codigoSKU = list(codigo)
-    codigoAbreviado = codigoSKU[0] + codigoSKU[1]
+    
+    if(str(codigo).startswith('ADIR')):
+        codigoAbreviado = 'ADIR'
+    else:
+        codigoAbreviado = codigoSKU[0] + codigoSKU[1]
     #Agregar funcion de verificacion de la clave en JSON de marbetes
     numero = numerosMarbetes[codigoAbreviado]
 
@@ -140,17 +144,17 @@ def editarSheet(contenedor, noTarimas, resto, fecha, proveedor,
                         listaDatos[1] = int(masterPack.get()) * int(resto.get())
                         listaDatos[7] = listaDatos[1]
                         listaDatos[2] = resto.get()
-                        editarExcel(listaDatos)
+                        # editarExcel(listaDatos)
                         agregarDatos(codigoMarbete[0] + str(i), listaDatos)
                         editMarbetes(codigoMarbete[0] + str(i), listaDatos)
                     else:
                         listaDatos[1] = listaDatos[7]
                         listaDatos[2] = listaDatos[7]
-                        editarExcel(listaDatos)
+                        # editarExcel(listaDatos)
                         agregarDatos(codigoMarbete[0] + str(i), listaDatos)
                         editMarbetes(codigoMarbete[0] + str(i), listaDatos)
                 else:
-                    editarExcel(listaDatos)
+                    # editarExcel(listaDatos)
                     agregarDatos(codigoMarbete[0] + str(i), listaDatos)
                     editMarbetes(codigoMarbete[0] + str(i), listaDatos)
 
@@ -175,9 +179,14 @@ def verificacionInformacionArticulo(campoCodigo, descripcion, barras, estiba, no
     codigoArticulo = campoCodigo.get()
     codigoArticulo = codigoArticulo.upper()
     comprobacionRegex = '[A-Z][A-Z][1-9][0-9]*[0-9]*C[1-9][0-9]*'
+    comprobacionRegexADIR = 'ADIR[0-9][0-9]*[0-9]*[0-9]*[0-9]*[0-9]*[0-9]*'
     resultado = re.findall(comprobacionRegex, codigoArticulo)
+    resultadoADIR = re.findall(comprobacionRegexADIR, codigoArticulo)
     
-    if(resultado):
+    print(resultado)
+    print(resultadoADIR)
+    
+    if((resultado != '') or (resultadoADIR != '')):
         
         extraerNumero(codigoArticulo)
 
