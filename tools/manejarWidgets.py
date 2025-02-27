@@ -1,27 +1,40 @@
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
+import customtkinter
 
-def crearCampo(pestañaPersonal, texto, coordenadaX, coordenadaY):
-    labelAux = Label(pestañaPersonal, text=texto, justify='center')
+def crearCampo(pestañaPersonal, texto, coordenadaX, coordenadaY, color):
+    labelAux = customtkinter.CTkLabel(
+        pestañaPersonal, 
+        text=texto, 
+        justify='center',
+        font=('Aptos', 12, "bold"),
+        text_color='#212529')
     labelAux.place(relx=coordenadaX, rely=coordenadaY)
-    campoAux = ttk.Entry(pestañaPersonal, justify='center')
+    campoAux = customtkinter.CTkEntry(
+        pestañaPersonal, 
+        justify='center', 
+        corner_radius=10, 
+        fg_color=color,
+        text_color='#495057',
+        # font=('Aptos', 13, 'bold')
+        )
     campoAux.place(relx=coordenadaX, rely=coordenadaY + 0.04)
     return campoAux
 
 def habilitarEdicion(descripcion, barras, estiba, noProductos, masterPack):
-    barras.config(state='enabled')
-    descripcion.config(state='enabled')
-    estiba.config(state='enabled')
-    noProductos.config(state='enabled')
-    masterPack.config(state='enabled')
+    barras.configure(state='normal')
+    descripcion.configure(state='normal')
+    estiba.configure(state='normal')
+    noProductos.configure(state='normal')
+    masterPack.configure(state='normal')
     
 def deshabilitarEdicion(descripcion, barras, estiba, noProductos, masterPack):
-     descripcion.config(state='disabled')
-     barras.config(state='disabled')
-     estiba.config(state='disabled')
-     noProductos.config(state='disabled')
-     masterPack.config(state='disabled')
+     descripcion.configure(state='disabled')
+     barras.configure(state='disabled')
+     estiba.configure(state='disabled')
+     noProductos.configure(state='disabled')
+     masterPack.configure(state='disabled')
 
 
 def informacionArticulo(listaInfoArticulo, descripcion, barras, estiba, noProductos, masterPack):

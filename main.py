@@ -4,12 +4,14 @@ from editPersonal import *
 from configuracion import *
 from editAdir import *
 from WSM import *
+import customtkinter 
 
 leerCSV()
 
 # Ventana principal
-app = Tk()
-app.geometry("800x800")
+app = customtkinter.CTk()
+# customtkinter.set_default_color_theme("green") 
+app.geometry("600x600")
 # app.geometry("600x600")
 app.title("Select Shop Inbound")
 app.resizable(False, False)

@@ -20,6 +20,7 @@ def archivoEditable(ruta):
     bookPath = ruta
     global book 
     book = openpyxl.load_workbook(bookPath)
+    
     # print(f'Funcion editExcel path: {bookPath}')
 
 def ruta():
@@ -31,14 +32,15 @@ def guardarExcel():
 def cerrarExcel():
     book.close()
 
-# def editarExcel(listaDatos):    
-#     sheet = book['entarimadoLote']
-#     print(f"Celda {sheet.max_row}")
+def editarArchivoExcel(listaDatos):  
+    bookProductos = openpyxl.load_workbook('files\Personal.xlsx') 
+    sheet = bookProductos['Productos']
+    print(f"Celda {sheet.max_row}")
 
-#     nuevaCelda = sheet.max_row + 1
-#     sheet.cell(row=nuevaCelda, column=1, value=listaDatos[0])
-#     sheet.cell(row=nuevaCelda, column=2, value=listaDatos[11])
-#     sheet.cell(row=nuevaCelda, column=3, value=listaDatos[1])
+    nuevaCelda = sheet.max_row + 1
+    sheet.cell(row=nuevaCelda, column=1, value=listaDatos[0])
+    sheet.cell(row=nuevaCelda, column=2, value=listaDatos[11])
+    sheet.cell(row=nuevaCelda, column=3, value=listaDatos[1])
 
 def editarExcel(sku, ubicacion, cantidad):
     sheet = book['entarimadoLote']

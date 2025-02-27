@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
 from tkinter import scrolledtext as scroll
+import customtkinter 
 import json
 import csv
 import re
@@ -9,6 +10,7 @@ from editSheet import *
 from editExcel import *
 from tools.manejarWidgets import *
 from editPersonalExcel import *
+from PIL import Image, ImageTk
 
 def extraerNumero(codigo):
     """
@@ -38,56 +40,103 @@ def obtenerPestañas(pestaña):
     """
     pestañaPersonal = pestaña
     
-    labelCodigo = Label(pestañaPersonal, text='Codigo', justify='center')
+    labelCodigo = customtkinter.CTkLabel(
+        pestañaPersonal, 
+        text='Código (SKU)', 
+        justify='center',
+        font=('Aptos', 13, 'bold'),
+        text_color='#212529')
     labelCodigo.pack()
-    campoCodigo = ttk.Entry(pestañaPersonal, justify='center')
+    campoCodigo = customtkinter.CTkEntry(
+        pestañaPersonal, 
+        justify='center',
+        fg_color='white',
+        corner_radius=8,
+        text_color='#212529')
     campoCodigo.pack()
-    
-    boton = ttk.Button(
+
+    lupaImagen = ImageTk.PhotoImage(Image.open('icons\Lupa.png').resize((18,18), Image.LANCZOS))
+
+    boton = customtkinter.CTkButton(
         pestañaPersonal, 
         text='Buscar', 
-        command=lambda: verificacionInformacionArticulo(campoCodigo, descripcion, barras, estiba, noProductos, masterPack)
+        command=lambda: verificacionInformacionArticulo(campoCodigo, descripcion, barras, estiba, noProductos, masterPack),
+        corner_radius=10,
+        width=100,
+        font=('Aptos', 13, "bold"),
+        fg_color='#168aad',
+        hover_color='#184e77',
+        image=lupaImagen, 
+        compound='right'
         )
-    boton.pack()
+    boton.pack(padx=10, pady=10)
     
-    barras = crearCampo(pestañaPersonal, 'Codigo de barras', 0.2, 0.16)
-    estiba = crearCampo(pestañaPersonal,'Productos por tarima', 0.6, 0.16)
-    noProductos = crearCampo(pestañaPersonal,'Cajas por tarima', 0.2, 0.26)
-    masterPack = crearCampo(pestañaPersonal,'Master Pack', 0.6, 0.26)
+    barras = crearCampo(pestañaPersonal, 'Código de barras', 0.2, 0.16, '#dee2e6')
+    estiba = crearCampo(pestañaPersonal,'Productos por tarima', 0.6, 0.16, '#dee2e6')
+    noProductos = crearCampo(pestañaPersonal,'Cajas por tarima', 0.2, 0.26, '#dee2e6')
+    masterPack = crearCampo(pestañaPersonal,'Master Pack', 0.6, 0.26, '#dee2e6')
     
-    labelDescripcion = Label(pestañaPersonal, text='Descripcion', justify='center')
+    labelDescripcion = customtkinter.CTkLabel(
+        pestañaPersonal, 
+        text='Descripción', 
+        justify='center',
+        font=('Aptos', 13, "bold"),
+        text_color='#212529')
     labelDescripcion.place(relx=0.45, rely=0.35)
-    descripcion = ttk.Entry(pestañaPersonal, justify='center')
+    descripcion = customtkinter.CTkEntry(
+        pestañaPersonal, 
+        justify='center',
+        corner_radius=10, 
+        fg_color='#dee2e6',
+        text_color='#495057')
     descripcion.place(relx=0.26, rely=0.39, relwidth=0.5)
     
-    botonEditar = ttk.Button(
+    editarImagen = ImageTk.PhotoImage(Image.open('icons\pen.png').resize((15,15), Image.LANCZOS))
+
+    botonEditar = customtkinter.CTkButton(
         pestañaPersonal,
         text='Editar',
-        command=lambda: habilitarEdicion(descripcion, barras, estiba, noProductos, masterPack)
+        command=lambda: habilitarEdicion(descripcion, barras, estiba, noProductos, masterPack),
+        corner_radius=10,
+        width=100,
+        font=('Aptos', 13, "bold"),
+        fg_color='#168aad',
+        hover_color='#184e77',
+        image=editarImagen,
+        compound='right'
     )
-    botonEditar.place(relx=0.45, rely=0.45)
+    botonEditar.place(relx=0.42, rely=0.45)
         
     separator = ttk.Separator(pestañaPersonal, orient='horizontal')
-    separator.place(relx=0, rely=0.5, relwidth=1, relheight=1)
+    separator.place(relx=0, rely=0.52, relwidth=1, relheight=1)
     guardarDatos(pestañaPersonal, campoCodigo, barras, estiba, noProductos, masterPack, descripcion)
     
 def guardarDatos(pestañaPersonal, campoCodigo, barras, estiba, noProductos, masterPack, descripcion):
     """
     Crea los widgets de lo que ingresara el usuario para generar los marbetes
     """
-    contenedor = crearCampo(pestañaPersonal, 'Contenedor', 0.2, 0.54)
-    fecha = crearCampo(pestañaPersonal, 'Fecha', 0.6, 0.54)
-    proveedor = crearCampo(pestañaPersonal, 'Proveedor', 0.2, 0.64)
-    noTarimas = crearCampo(pestañaPersonal, 'Numero de tarimas', 0.6, 0.64)
-    resto = crearCampo(pestañaPersonal, 'Resto (Cajas)', 0.2, 0.74)
-    ubicacion = crearCampo(pestañaPersonal, 'Ubicación', 0.6, 0.74)
+    contenedor = crearCampo(pestañaPersonal, 'Contenedor', 0.2, 0.54, 'white')
+    fecha = crearCampo(pestañaPersonal, 'Fecha', 0.6, 0.54, 'white')
+    proveedor = crearCampo(pestañaPersonal, 'Proveedor', 0.2, 0.64, 'white')
+    noTarimas = crearCampo(pestañaPersonal, 'Número de tarimas', 0.6, 0.64, 'white')
+    resto = crearCampo(pestañaPersonal, 'Resto (Cajas)', 0.2, 0.74, 'white')
+    ubicacion = crearCampo(pestañaPersonal, 'Ubicación', 0.6, 0.74, 'white')
     
-    botonAgregar = ttk.Button(
+    generarImagen = ImageTk.PhotoImage(Image.open('icons\gears.png').resize((15,15), Image.LANCZOS))
+
+    botonAgregar = customtkinter.CTkButton(
         pestañaPersonal, 
-        text='Generar marbetes', 
+        text='Generar', 
         command=lambda: editarSheet(contenedor, noTarimas, resto, fecha, proveedor, 
-                                    campoCodigo, barras, estiba, noProductos, masterPack, descripcion, ubicacion))
-    botonAgregar.place(relx=0.42, rely=0.84)
+                                    campoCodigo, barras, estiba, noProductos, masterPack, descripcion, ubicacion),
+        corner_radius=10,
+        width=100,
+        font=('Aptos', 13, "bold"),
+        fg_color='#168aad',
+        hover_color='#29bf12',
+        image=generarImagen,
+        compound='right')
+    botonAgregar.place(relx=0.42, rely=0.87)
     
 def validacionDatos(expresionRegular, campoVerificar):
     """Revisa el campo ingresado por el usuario a partir de una expresión regular
@@ -108,7 +157,8 @@ def editarSheet(contenedor, noTarimas, resto, fecha, proveedor,
     y cuando los datos sean correctos.
     """
     if (ruta() == ''):
-        messagebox.showwarning('Alerta', 'Seleccione un archivo para editar.')
+        print()
+        # messagebox.showwarning('Alerta', 'Seleccione un archivo para editar.')
     else:
         marbetes = []
         validacionCampos = []
@@ -130,7 +180,7 @@ def editarSheet(contenedor, noTarimas, resto, fecha, proveedor,
             
         if(validacionCampos.count(False) == 0):
             
-
+            abrirLibro()
             for i in range(codigoMarbete[1], indiceFinal, 1):
                 marbetes.append(codigoMarbete[0] + str(i))
                 """
@@ -144,18 +194,18 @@ def editarSheet(contenedor, noTarimas, resto, fecha, proveedor,
                         listaDatos[1] = int(masterPack.get()) * int(resto.get())
                         listaDatos[7] = listaDatos[1]
                         listaDatos[2] = resto.get()
-                        # editarExcel(listaDatos)
-                        agregarDatos(codigoMarbete[0] + str(i), listaDatos)
+                        #editarArchivoExcel(listaDatos)
+                        #agregarDatos(codigoMarbete[0] + str(i), listaDatos)
                         editMarbetes(codigoMarbete[0] + str(i), listaDatos)
                     else:
                         listaDatos[1] = listaDatos[7]
                         listaDatos[2] = listaDatos[7]
-                        # editarExcel(listaDatos)
-                        agregarDatos(codigoMarbete[0] + str(i), listaDatos)
+                        #editarArchivoExcel(listaDatos)
+                        #agregarDatos(codigoMarbete[0] + str(i), listaDatos)
                         editMarbetes(codigoMarbete[0] + str(i), listaDatos)
                 else:
-                    # editarExcel(listaDatos)
-                    agregarDatos(codigoMarbete[0] + str(i), listaDatos)
+                    #editarArchivoExcel(listaDatos)
+                    #agregarDatos(codigoMarbete[0] + str(i), listaDatos)
                     editMarbetes(codigoMarbete[0] + str(i), listaDatos)
 
             messagebox.showinfo("Marbetes", "Marbetes generados exitosamente")
@@ -163,11 +213,11 @@ def editarSheet(contenedor, noTarimas, resto, fecha, proveedor,
             numerosMarbetes = leerNumerosMarbetes()
             actualizarJSON(numerosMarbetes, codigoMarbete[0], int(noTarimas.get()))
             listaDatos.clear()
-            guardarExcel()
+            #guardarExcel()
             guardarExcelMarbete()
         else:
             messagebox.showerror('Error', 'Dato erróneo, verificar campos')
-        cerrarExcel()
+        #cerrarExcel()
         cerrarExcelMarbete()
     
 def verificacionInformacionArticulo(campoCodigo, descripcion, barras, estiba, noProductos, masterPack):
@@ -192,12 +242,14 @@ def verificacionInformacionArticulo(campoCodigo, descripcion, barras, estiba, no
 
         if(articulosShop.get(codigoArticulo)):
             listaInfoArticulo = articulosShop.get(codigoArticulo)
+            listaInfoArticulo[0] = listaInfoArticulo[0].decode('utf-8')
             informacionArticulo(listaInfoArticulo, descripcion, barras, estiba, noProductos, masterPack)
         else:
             messagebox.showwarning("Código no encontrado", "No se ha encontrado el producto\nIntente de nuevo")
     else:
         messagebox.showerror("Error", "Código no válido")
 
+# -*- coding: utf-8 -*-
 def leerCSV():
     """
     Lee el archivo de todos los productos para generar una lista que servira como consulta
@@ -218,7 +270,6 @@ def leerCSV():
             articulosShop.update(diccionarioAux)
             diccionarioAux = {}
             listaInformacion = []
-            
 def leerNumerosMarbetes():
     """
     Abre el archivo de los cantadores de cada una de las categorias de los productos
