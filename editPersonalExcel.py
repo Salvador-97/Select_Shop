@@ -2,9 +2,9 @@ import openpyxl
 from openpyxl import workbook
 from openpyxl.styles import *
 
-def abrirLibro():
+def abrirLibro(ruta):
     global book
-    book = openpyxl.load_workbook('files/Pruebas_Excel.xlsx')
+    book = openpyxl.load_workbook(ruta)
     
 def editMarbetes(marbete, listaDatos):
     #Agregar opcion de elegir la pestaña del archivo de excel

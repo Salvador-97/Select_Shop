@@ -6,12 +6,15 @@ import csv
 from pathlib import Path
 from editExcel import *
 from tools.manejarWidgets import *
+from PIL import Image, ImageTk
 
 def configuracionRutaArchivo():
     if (bookPath == ''):
         messagebox.showwarning('Alerta', 'Seleccione un archivo para editar.')
 
 def abrirArchivo():
+    global ruta
+    
     archivo = filedialog.askopenfilename(
         filetypes=(
             [("Excel files", ".xlsx .xls")]
@@ -19,9 +22,13 @@ def abrirArchivo():
     )
     
     if archivo:
-        archivoEditable(archivo)
+        ruta = archivoEditable(archivo)
     else:
         configuracionRutaArchivo()
+    return ruta
+
+def getRuta():
+    return ruta
 
 def editarCSVNuevoProducto(informacionProducto):
     columnas = ['codigo', 'Nombre', 'Barras', 'Tarima', 'Estiba', 'masterPack']
@@ -53,36 +60,80 @@ def agregarProducto(producto):
 
 def menuConfiguracion(pestaña):
     # crearCampo(pestaña, 'Configuraciones', )
-    labelConfig = Label(pestaña, text="Configuraciones", justify='center') 
+    labelConfig = customtkinter.CTkLabel(
+        pestaña, text="Configuraciones", 
+        justify='center', font=('Aptos', 13, 'bold'),
+        text_color='#212529') 
     labelConfig.pack()
     
-    labelArchivo = Label(pestaña, text='Archivo para entarimado de lote')
-    labelArchivo.place(relx=0.36, rely=0.1)
-    archivo = ttk.Button(
+    archivoImagen = customtkinter.CTkImage(Image.open('icons\\file.png'), size=(15,15))
+
+    labelArchivo = Label(pestaña, text='Archivo para personal')
+    labelArchivo.place(relx=0.25, rely=0.10)
+    archivo = customtkinter.CTkButton(
         pestaña, 
         text='Seleccionar archivo...', 
-        command=abrirArchivo)
-    archivo.place(relx=0.4, rely=0.15)
+        command=abrirArchivo,
+        image=archivoImagen,
+        corner_radius=10,
+        font=('Aptos', 13, "bold"),
+        fg_color='#168aad',
+        hover_color='#184e77',
+        text_color="white")
+    archivo.place(relx=0.5, rely=0.10)
+
+    labelArchivo = Label(pestaña, text='Archivo para \nentarimado de lote')
+    labelArchivo.place(relx=0.25, rely=0.165)
+    archivo = customtkinter.CTkButton(
+        pestaña, 
+        text='Seleccionar archivo...', 
+        command=abrirArchivo,
+        image=archivoImagen,
+        corner_radius=10,
+        font=('Aptos', 13, "bold"),
+        fg_color='#168aad',
+        hover_color='#184e77',
+        text_color="white")
+    archivo.place(relx=0.5, rely=0.18)
     
-    labelArchivo = Label(pestaña, text='Link de Drive Personal')
-    labelArchivo.place(relx=0.4, rely=0.25)
-    archivo = ttk.Entry(pestaña)
-    archivo.place(relx=0.4, rely=0.3)
+    # labelArchivo = Label(pestaña, text='Link de Drive Personal')
+    # labelArchivo.place(relx=0.4, rely=0.25)
+    # archivo = ttk.Entry(pestaña)
+    # archivo.place(relx=0.4, rely=0.3)
     
     separator = ttk.Separator(pestaña, orient='horizontal')
-    separator.place(relx=0, rely=0.5, relwidth=1, relheight=1)
+    separator.place(relx=0, rely=0.28, relwidth=1, relheight=1)
     
-    labelProductoNuevo = Label(pestaña, text='Agregar nuevo producto')
-    labelProductoNuevo.place(relx=0.4, rely=0.55)
-    descripcion = ttk.Entry(pestaña, justify='center')
-    descripcion.place(relx=0.28, rely=0.6, relwidth=0.5)
+    labelProductoNuevo = customtkinter.CTkLabel(
+        pestaña, text='Agregar nuevo producto',
+        font=('Aptos', 13, 'bold'),
+        text_color='#212529') 
+    labelProductoNuevo.place(relx=0.38, rely=0.3)
+    descripcion = customtkinter.CTkEntry(
+        pestaña, justify='center',
+        corner_radius=10,
+        placeholder_text="SKU,Descripción,Código de Barras,Art. Tarima,Art. Estiba,Master Pack(N/A)",
+        placeholder_text_color='#adb5bd',
+        fg_color='white',
+        border_width=1,
+        state='normal')
+    descripcion.place(relx=0.26, rely=0.35, relwidth=0.5)
     
-    agregar = ttk.Button(
+    agregarImagen = customtkinter.CTkImage(Image.open('icons\\add.png'), size=(15,15))
+
+    agregar = customtkinter.CTkButton(
         pestaña,
         text='Agregar',
-        command=lambda: agregarProducto(descripcion.get())
+        command=lambda: agregarProducto(descripcion.get()),
+        image=agregarImagen,
+        corner_radius=10,
+        compound='right',
+        font=('Aptos', 13, "bold"),
+        fg_color='#168aad',
+        hover_color='#184e77',
+        text_color='white'
     )
-    agregar.place(relx=0.45, rely=0.65)
+    agregar.place(relx=0.4, rely=0.42)
     
     
 # pestañaConfiguracion = saludo()

@@ -20,7 +20,7 @@ def archivoEditable(ruta):
     bookPath = ruta
     global book 
     book = openpyxl.load_workbook(bookPath)
-    
+    return ruta
     # print(f'Funcion editExcel path: {bookPath}')
 
 def ruta():

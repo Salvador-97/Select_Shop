@@ -8,6 +8,7 @@ import csv
 import re
 from editSheet import *
 from editExcel import *
+from configuracion import *
 from tools.manejarWidgets import *
 from editPersonalExcel import *
 from PIL import Image, ImageTk
@@ -22,15 +23,19 @@ def extraerNumero(codigo):
     numerosMarbetes = leerNumerosMarbetes()
     codigoSKU = list(codigo)
     
+
     if(str(codigo).startswith('ADIR')):
         codigoAbreviado = 'ADIR'
     else:
         codigoAbreviado = codigoSKU[0] + codigoSKU[1]
-    #Agregar funcion de verificacion de la clave en JSON de marbetes
-    numero = numerosMarbetes[codigoAbreviado]
 
-    codigoMarbete[0] = codigoAbreviado
-    codigoMarbete[1] = numero
+    if(numerosMarbetes.get(codigoAbreviado)):
+        numero = numerosMarbetes[codigoAbreviado]
+        codigoMarbete[0] = codigoAbreviado
+        codigoMarbete[1] = numero
+        
+    #Agregar funcion de verificacion de la clave en JSON de marbetes
+    
 
 def obtenerPestañas(pestaña):
     """
@@ -40,22 +45,12 @@ def obtenerPestañas(pestaña):
     """
     pestañaPersonal = pestaña
     
-    labelCodigo = customtkinter.CTkLabel(
-        pestañaPersonal, 
-        text='Código (SKU)', 
-        justify='center',
-        font=('Aptos', 13, 'bold'),
-        text_color='#212529')
+    labelCodigo = generarLabel(pestaña, 'Código (SKU)')
     labelCodigo.pack()
-    campoCodigo = customtkinter.CTkEntry(
-        pestañaPersonal, 
-        justify='center',
-        fg_color='white',
-        corner_radius=8,
-        text_color='#212529')
+    campoCodigo = generarEntry(pestaña, 'white')
     campoCodigo.pack()
 
-    lupaImagen = ImageTk.PhotoImage(Image.open('icons\Lupa.png').resize((18,18), Image.LANCZOS))
+    lupaImagen = customtkinter.CTkImage(Image.open('icons\Lupa.png'), size=(15,15))
 
     boton = customtkinter.CTkButton(
         pestañaPersonal, 
@@ -76,22 +71,12 @@ def obtenerPestañas(pestaña):
     noProductos = crearCampo(pestañaPersonal,'Cajas por tarima', 0.2, 0.26, '#dee2e6')
     masterPack = crearCampo(pestañaPersonal,'Master Pack', 0.6, 0.26, '#dee2e6')
     
-    labelDescripcion = customtkinter.CTkLabel(
-        pestañaPersonal, 
-        text='Descripción', 
-        justify='center',
-        font=('Aptos', 13, "bold"),
-        text_color='#212529')
+    labelDescripcion = generarLabel(pestaña, 'Descripción')
     labelDescripcion.place(relx=0.45, rely=0.35)
-    descripcion = customtkinter.CTkEntry(
-        pestañaPersonal, 
-        justify='center',
-        corner_radius=10, 
-        fg_color='#dee2e6',
-        text_color='#495057')
+    descripcion = generarEntry(pestaña, 'white')
     descripcion.place(relx=0.26, rely=0.39, relwidth=0.5)
     
-    editarImagen = ImageTk.PhotoImage(Image.open('icons\pen.png').resize((15,15), Image.LANCZOS))
+    editarImagen = customtkinter.CTkImage(Image.open('icons\pen.png'), size=(15,15))
 
     botonEditar = customtkinter.CTkButton(
         pestañaPersonal,
@@ -120,15 +105,15 @@ def guardarDatos(pestañaPersonal, campoCodigo, barras, estiba, noProductos, mas
     proveedor = crearCampo(pestañaPersonal, 'Proveedor', 0.2, 0.64, 'white')
     noTarimas = crearCampo(pestañaPersonal, 'Número de tarimas', 0.6, 0.64, 'white')
     resto = crearCampo(pestañaPersonal, 'Resto (Cajas)', 0.2, 0.74, 'white')
-    ubicacion = crearCampo(pestañaPersonal, 'Ubicación', 0.6, 0.74, 'white')
+    # ubicacion = crearCampo(pestañaPersonal, 'Ubicación', 0.6, 0.74, 'white')
     
-    generarImagen = ImageTk.PhotoImage(Image.open('icons\gears.png').resize((15,15), Image.LANCZOS))
+    generarImagen = customtkinter.CTkImage(Image.open('icons\gears.png'), size=(15,15))
 
     botonAgregar = customtkinter.CTkButton(
         pestañaPersonal, 
         text='Generar', 
         command=lambda: editarSheet(contenedor, noTarimas, resto, fecha, proveedor, 
-                                    campoCodigo, barras, estiba, noProductos, masterPack, descripcion, ubicacion),
+                                    campoCodigo, barras, estiba, noProductos, masterPack, descripcion),
         corner_radius=10,
         width=100,
         font=('Aptos', 13, "bold"),
@@ -146,41 +131,43 @@ def validacionDatos(expresionRegular, campoVerificar):
     if(resultado):
         listaDatos.append(campoMayus)
         validacionCampos = True
+        campoVerificar.configure(fg_color='white', text_color='#495057')
     else:
         validacionCampos = False
+        campoVerificar.configure(fg_color='#f21b3f', text_color='#eff1ed')
     return validacionCampos
 
 def editarSheet(contenedor, noTarimas, resto, fecha, proveedor, 
-                campoCodigo, barras, estiba, noProductos, masterPack, descripcion, ubicacion):
+                campoCodigo, barras, estiba, noProductos, masterPack, descripcion):
     """
     Obtiene los datos ingresados por el usuario y los agrega al archivo de Drive y Excel siempre 
     y cuando los datos sean correctos.
     """
-    if (ruta() == ''):
-        print()
-        # messagebox.showwarning('Alerta', 'Seleccione un archivo para editar.')
-    else:
-        marbetes = []
-        validacionCampos = []
+    
+    marbetes = []
+    validacionCampos = []
         
-        indiceFinal = codigoMarbete[1] + int(noTarimas.get())
-        listaDatos.append(campoCodigo.get().upper())
-        listaDatos.append(estiba.get())
-        listaDatos.append(noProductos.get())
-        listaDatos.append(descripcion.get())
-        listaDatos.append(barras.get())
-        listaDatos.append(masterPack.get())
+    indiceFinal = codigoMarbete[1] + int(noTarimas.get())
+    listaDatos.append(campoCodigo.get().upper())
+    listaDatos.append(estiba.get())
+    listaDatos.append(noProductos.get())
+    listaDatos.append(descripcion.get())
+    listaDatos.append(barras.get())
+    listaDatos.append(masterPack.get())
         
-        validacionCampos.append(validacionDatos('[0-9][0-9]*[0-9]*', noTarimas))
-        validacionCampos.append(validacionDatos('[0-9][0-9]*[0-9]*', resto))
-        validacionCampos.append(validacionDatos('(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0,1,2])\/(19|20)\d{2}', fecha))    
-        validacionCampos.append(validacionDatos('[A-Z][0-9][0-9][0-9]', proveedor))    
-        validacionCampos.append(validacionDatos('[A-Z][A-Z][A-Z][A-Z][0-9][0-9][0-9][0-9][0-9][0-9][0-9]', contenedor))
-        validacionCampos.append(validacionDatos('[A-Z][1-9][0-9]*A[1-9][0-9]*', ubicacion))
+    validacionCampos.append(validacionDatos('[0-9][0-9]*[0-9]*', noTarimas))
+    validacionCampos.append(validacionDatos('[0-9][0-9]*[0-9]*', resto))
+    validacionCampos.append(validacionDatos('(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0,1,2])\/(19|20)\d{2}', fecha))    
+    validacionCampos.append(validacionDatos('P0[0-9][0-9]', proveedor))    
+    validacionCampos.append(validacionDatos('[A-Z][A-Z][A-Z][A-Z][0-9][0-9][0-9][0-9][0-9][0-9][0-9]', contenedor))
+    # validacionCampos.append(validacionDatos('[A-Z][1-9][0-9]*A[1-9][0-9]*', ubicacion))
             
-        if(validacionCampos.count(False) == 0):
-            
-            abrirLibro()
+    if(validacionCampos.count(False) == 0):
+        
+        pathArchivoPersonal = ruta()
+        
+        if(pathArchivoPersonal):
+        
             for i in range(codigoMarbete[1], indiceFinal, 1):
                 marbetes.append(codigoMarbete[0] + str(i))
                 """
@@ -206,8 +193,7 @@ def editarSheet(contenedor, noTarimas, resto, fecha, proveedor,
                 else:
                     #editarArchivoExcel(listaDatos)
                     #agregarDatos(codigoMarbete[0] + str(i), listaDatos)
-                    editMarbetes(codigoMarbete[0] + str(i), listaDatos)
-
+                    editMarbetes(codigoMarbete[0] + str(i), listaDatos)   
             messagebox.showinfo("Marbetes", "Marbetes generados exitosamente")
             codigoMarbete[1] = codigoMarbete[1] + int(noTarimas.get())
             numerosMarbetes = leerNumerosMarbetes()
@@ -216,9 +202,13 @@ def editarSheet(contenedor, noTarimas, resto, fecha, proveedor,
             #guardarExcel()
             guardarExcelMarbete()
         else:
-            messagebox.showerror('Error', 'Dato erróneo, verificar campos')
-        #cerrarExcel()
+            pathArchivoPersonal = abrirArchivo()
+            abrirLibro(pathArchivoPersonal)
         cerrarExcelMarbete()
+    else:
+        messagebox.showerror('Error', 'Dato erróneo, verificar campos')
+            #cerrarExcel()
+    
     
 def verificacionInformacionArticulo(campoCodigo, descripcion, barras, estiba, noProductos, masterPack):
     """
@@ -243,11 +233,14 @@ def verificacionInformacionArticulo(campoCodigo, descripcion, barras, estiba, no
         if(articulosShop.get(codigoArticulo)):
             listaInfoArticulo = articulosShop.get(codigoArticulo)
             listaInfoArticulo[0] = listaInfoArticulo[0].decode('utf-8')
+            campoCodigo.configure(fg_color='#affc41', text_color='#495057')
             informacionArticulo(listaInfoArticulo, descripcion, barras, estiba, noProductos, masterPack)
         else:
             messagebox.showwarning("Código no encontrado", "No se ha encontrado el producto\nIntente de nuevo")
+            campoCodigo.configure(fg_color='#ffd449', text_color='#495057')
     else:
         messagebox.showerror("Error", "Código no válido")
+        campoCodigo.configure(fg_color='#f21b3f', text_color='#eff1ed')
 
 # -*- coding: utf-8 -*-
 def leerCSV():
@@ -272,7 +265,7 @@ def leerCSV():
             listaInformacion = []
 def leerNumerosMarbetes():
     """
-    Abre el archivo de los cantadores de cada una de las categorias de los productos
+    Abre el archivo de los contadores de cada una de las categorias de los productos
     """
     with open("files/marbetesNumeros.json") as archivoJSON:
         numerosExtraidos = json.load(archivoJSON)
