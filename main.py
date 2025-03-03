@@ -36,26 +36,26 @@ pestañas = ttk.Notebook(app)
 pestañas.pack(fill='both', expand='yes')
 
 pestañaPersonal = ttk.Frame(pestañas)
-pestañaSSWMSOK = ttk.Frame(pestañas)
+# pestañaSSWMSOK = ttk.Frame(pestañas)
 # pestañaTiempoExtra = ttk.Frame(pestañas)
-pestañaConfiguracion = ttk.Frame(pestañas)
+# pestañaConfiguracion = ttk.Frame(pestañas)
 # pestañaAdir = ttk.Frame(pestañas)
 
 
 pestañas.add(pestañaPersonal, text='Personal')
 # pestañas.add(pestañaAdir, text='ADIR')
-pestañas.add(pestañaSSWMSOK, text='SSWMSOK')
+# pestañas.add(pestañaSSWMSOK, text='SSWMSOK')
 # pestañas.add(pestañaTiempoExtra, text='Tiempo Extra')
-pestañas.add(pestañaConfiguracion, text='Configuración')
+# pestañas.add(pestañaConfiguracion, text='Configuración')
 
 
 # configuracionRutaArchivo()
 
 obtenerPestañas(pestañaPersonal)
 # menuExcel(pestañaSSWMSOK)
-menuConfiguracion(pestañaConfiguracion)
+# menuConfiguracion(pestañaConfiguracion)
 # menuADIR(pestañaAdir)
-menuWSM(pestañaSSWMSOK)
+# menuWSM(pestañaSSWMSOK)
 
 # guardarDatos(pestañaPersonal)
 

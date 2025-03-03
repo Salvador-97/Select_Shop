@@ -5,6 +5,7 @@ from tkinter import filedialog
 import csv
 from pathlib import Path
 from editExcel import *
+from editPersonalExcel import abrirLibro
 from tools.manejarWidgets import *
 from PIL import Image, ImageTk
 
@@ -22,7 +23,7 @@ def abrirArchivo():
     )
     
     if archivo:
-        ruta = archivoEditable(archivo)
+        ruta = abrirLibro(archivo)
     else:
         configuracionRutaArchivo()
     return ruta

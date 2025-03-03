@@ -1,5 +1,6 @@
 import openpyxl
 from tkinter import ttk
+import editPersonalExcel
 
 def menuExcel(pestaña):
     botonLimpiar = ttk.Button(

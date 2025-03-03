@@ -20,20 +20,23 @@ def extraerNumero(codigo):
     Por último, guarda el la categoria del producto (HG, EL, PO...) y el número
     del último marbete generado para esa categoria.
     """
-    numerosMarbetes = leerNumerosMarbetes()
-    codigoSKU = list(codigo)
     
-
-    if(str(codigo).startswith('ADIR')):
-        codigoAbreviado = 'ADIR'
-    else:
-        codigoAbreviado = codigoSKU[0] + codigoSKU[1]
-
-    if(numerosMarbetes.get(codigoAbreviado)):
-        numero = numerosMarbetes[codigoAbreviado]
-        codigoMarbete[0] = codigoAbreviado
-        codigoMarbete[1] = numero
+    if(codigo != ''):
+        numerosMarbetes = leerNumerosMarbetes()
+        codigoSKU = list(codigo)
         
+
+        if(str(codigo).startswith('ADIR')):
+            codigoAbreviado = 'ADIR'
+        else:
+            codigoAbreviado = codigoSKU[0] + codigoSKU[1]
+
+        if(numerosMarbetes.get(codigoAbreviado)):
+            numero = numerosMarbetes[codigoAbreviado]
+            codigoMarbete[0] = codigoAbreviado
+            codigoMarbete[1] = numero
+    else:
+        messagebox.showwarning('Alerta', 'Código no ingresado.')
     #Agregar funcion de verificacion de la clave en JSON de marbetes
     
 
@@ -144,71 +147,74 @@ def editarSheet(contenedor, noTarimas, resto, fecha, proveedor,
     y cuando los datos sean correctos.
     """
     
-    marbetes = []
-    validacionCampos = []
-        
-    indiceFinal = codigoMarbete[1] + int(noTarimas.get())
-    listaDatos.append(campoCodigo.get().upper())
-    listaDatos.append(estiba.get())
-    listaDatos.append(noProductos.get())
-    listaDatos.append(descripcion.get())
-    listaDatos.append(barras.get())
-    listaDatos.append(masterPack.get())
-        
-    validacionCampos.append(validacionDatos('[0-9][0-9]*[0-9]*', noTarimas))
-    validacionCampos.append(validacionDatos('[0-9][0-9]*[0-9]*', resto))
-    validacionCampos.append(validacionDatos('(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0,1,2])\/(19|20)\d{2}', fecha))    
-    validacionCampos.append(validacionDatos('P0[0-9][0-9]', proveedor))    
-    validacionCampos.append(validacionDatos('[A-Z][A-Z][A-Z][A-Z][0-9][0-9][0-9][0-9][0-9][0-9][0-9]', contenedor))
-    # validacionCampos.append(validacionDatos('[A-Z][1-9][0-9]*A[1-9][0-9]*', ubicacion))
+    if(campoCodigo.get() != ''):
+        marbetes = []
+        validacionCampos = []
             
-    if(validacionCampos.count(False) == 0):
-        
-        pathArchivoPersonal = ruta()
-        
-        if(pathArchivoPersonal):
-        
-            for i in range(codigoMarbete[1], indiceFinal, 1):
-                marbetes.append(codigoMarbete[0] + str(i))
-                """
-                Cuando llega a la última posición verifica el valor del resto
-                para para agregar esa cantidad en la columna correspondiente, en caso de que
-                el producto sea Master Pack se realiza la operación para calcular el total
-                de piezas
-                """
-                if((i == indiceFinal - 1) and (resto.get() != '0')):
-                    if((masterPack.get() != 'N/A') and (resto.get() != '0')):
-                        listaDatos[1] = int(masterPack.get()) * int(resto.get())
-                        listaDatos[7] = listaDatos[1]
-                        listaDatos[2] = resto.get()
-                        #editarArchivoExcel(listaDatos)
-                        #agregarDatos(codigoMarbete[0] + str(i), listaDatos)
-                        editMarbetes(codigoMarbete[0] + str(i), listaDatos)
+        indiceFinal = codigoMarbete[1] + int(noTarimas.get())
+        listaDatos.append(campoCodigo.get().upper())
+        listaDatos.append(estiba.get())
+        listaDatos.append(noProductos.get())
+        listaDatos.append(descripcion.get())
+        listaDatos.append(barras.get())
+        listaDatos.append(masterPack.get())
+            
+        validacionCampos.append(validacionDatos('[0-9][0-9]*[0-9]*', noTarimas))
+        validacionCampos.append(validacionDatos('[0-9][0-9]*[0-9]*', resto))
+        validacionCampos.append(validacionDatos('(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0,1,2])\/(19|20)\d{2}', fecha))    
+        validacionCampos.append(validacionDatos('P0[0-9][0-9]', proveedor))    
+        validacionCampos.append(validacionDatos('[A-Z][A-Z][A-Z][A-Z][0-9][0-9][0-9][0-9][0-9][0-9][0-9]', contenedor))
+        # validacionCampos.append(validacionDatos('[A-Z][1-9][0-9]*A[1-9][0-9]*', ubicacion))
+                
+        if(validacionCampos.count(False) == 0):
+            
+            pathArchivoPersonal = ruta()
+            
+            if(pathArchivoPersonal):
+            
+                for i in range(codigoMarbete[1], indiceFinal, 1):
+                    marbetes.append(codigoMarbete[0] + str(i))
+                    """
+                    Cuando llega a la última posición verifica el valor del resto
+                    para para agregar esa cantidad en la columna correspondiente, en caso de que
+                    el producto sea Master Pack se realiza la operación para calcular el total
+                    de piezas
+                    """
+                    if((i == indiceFinal - 1) and (resto.get() != '0')):
+                        if((masterPack.get() != 'N/A') and (resto.get() != '0')):
+                            listaDatos[1] = int(masterPack.get()) * int(resto.get())
+                            listaDatos[7] = listaDatos[1]
+                            listaDatos[2] = resto.get()
+                            #editarArchivoExcel(listaDatos)
+                            #agregarDatos(codigoMarbete[0] + str(i), listaDatos)
+                            editMarbetes(codigoMarbete[0] + str(i), listaDatos)
+                        else:
+                            listaDatos[1] = listaDatos[7]
+                            listaDatos[2] = listaDatos[7]
+                            #editarArchivoExcel(listaDatos)
+                            #agregarDatos(codigoMarbete[0] + str(i), listaDatos)
+                            editMarbetes(codigoMarbete[0] + str(i), listaDatos)
                     else:
-                        listaDatos[1] = listaDatos[7]
-                        listaDatos[2] = listaDatos[7]
                         #editarArchivoExcel(listaDatos)
                         #agregarDatos(codigoMarbete[0] + str(i), listaDatos)
-                        editMarbetes(codigoMarbete[0] + str(i), listaDatos)
-                else:
-                    #editarArchivoExcel(listaDatos)
-                    #agregarDatos(codigoMarbete[0] + str(i), listaDatos)
-                    editMarbetes(codigoMarbete[0] + str(i), listaDatos)   
-            messagebox.showinfo("Marbetes", "Marbetes generados exitosamente")
-            codigoMarbete[1] = codigoMarbete[1] + int(noTarimas.get())
-            numerosMarbetes = leerNumerosMarbetes()
-            actualizarJSON(numerosMarbetes, codigoMarbete[0], int(noTarimas.get()))
-            listaDatos.clear()
-            #guardarExcel()
-            guardarExcelMarbete()
+                        editMarbetes(codigoMarbete[0] + str(i), listaDatos)   
+                messagebox.showinfo("Marbetes", "Marbetes generados exitosamente")
+                codigoMarbete[1] = codigoMarbete[1] + int(noTarimas.get())
+                numerosMarbetes = leerNumerosMarbetes()
+                actualizarJSON(numerosMarbetes, codigoMarbete[0], int(noTarimas.get()))
+                listaDatos.clear()
+                #guardarExcel()
+                guardarExcelMarbete()
+            else:
+                pathArchivoPersonal = abrirArchivo()
+                abrirLibro(pathArchivoPersonal)
+            cerrarExcelMarbete()
         else:
-            pathArchivoPersonal = abrirArchivo()
-            abrirLibro(pathArchivoPersonal)
-        cerrarExcelMarbete()
+            messagebox.showerror('Error', 'Dato erróneo, verificar campos')
+            listaDatos.clear()
+                #cerrarExcel()
     else:
-        messagebox.showerror('Error', 'Dato erróneo, verificar campos')
-            #cerrarExcel()
-    
+        messagebox.showerror('Error', 'No se pueden generar información.\nBusque un producto.')    
     
 def verificacionInformacionArticulo(campoCodigo, descripcion, barras, estiba, noProductos, masterPack):
     """
@@ -223,9 +229,6 @@ def verificacionInformacionArticulo(campoCodigo, descripcion, barras, estiba, no
     resultado = re.findall(comprobacionRegex, codigoArticulo)
     resultadoADIR = re.findall(comprobacionRegexADIR, codigoArticulo)
     
-    print(resultado)
-    print(resultadoADIR)
-    
     if((resultado != '') or (resultadoADIR != '')):
         
         extraerNumero(codigoArticulo)
@@ -236,8 +239,9 @@ def verificacionInformacionArticulo(campoCodigo, descripcion, barras, estiba, no
             campoCodigo.configure(fg_color='#affc41', text_color='#495057')
             informacionArticulo(listaInfoArticulo, descripcion, barras, estiba, noProductos, masterPack)
         else:
-            messagebox.showwarning("Código no encontrado", "No se ha encontrado el producto\nIntente de nuevo")
-            campoCodigo.configure(fg_color='#ffd449', text_color='#495057')
+            if(codigoArticulo != ''):
+                messagebox.showwarning("Código no encontrado", "No se ha encontrado el producto\nIntente de nuevo")
+                campoCodigo.configure(fg_color='#ffd449', text_color='#495057')
     else:
         messagebox.showerror("Error", "Código no válido")
         campoCodigo.configure(fg_color='#f21b3f', text_color='#eff1ed')

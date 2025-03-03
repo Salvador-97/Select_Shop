@@ -4,7 +4,9 @@ from openpyxl.styles import *
 
 def abrirLibro(ruta):
     global book
-    book = openpyxl.load_workbook(ruta)
+    
+    if(ruta != ''):
+        book = openpyxl.load_workbook(ruta)
     
 def editMarbetes(marbete, listaDatos):
     #Agregar opcion de elegir la pestaña del archivo de excel
