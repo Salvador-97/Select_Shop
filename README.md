@@ -14,4 +14,4 @@ En esta sección si se desea modificar algún dato se puede hacer al oprimir el 
 
 En la siguiente sección se agrega todo lo relacionado al contenedor, incluyendo el número total de tarimas que salieron con su respectivo resto. Para finalizar, se debe oprimir el botón de "Generar", con lo que se abrira una ventana para seleccionar un archivo en donde se va a escribir toda la información.
 
-![Generar](/icons/Salida.PNG
+![Generar](/icons/Salida.PNG)
