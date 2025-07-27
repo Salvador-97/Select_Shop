@@ -1,0 +1,1 @@
+    # pestañaConfiguracion = crearPestaña(app, 'Configuración')
